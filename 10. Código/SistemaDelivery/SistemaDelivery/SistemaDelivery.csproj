@@ -212,6 +212,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\AlterarSenha.cshtml" />
     <Content Include="Views\Administrador\EditarUsuario.cshtml" />
+    <Content Include="Views\Empresa\EditEmpresa.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

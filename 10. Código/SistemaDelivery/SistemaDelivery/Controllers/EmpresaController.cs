@@ -80,6 +80,34 @@ namespace SistemaDelivery.Controllers
             }
             return View();
         }
+        public ActionResult EditEmpresa(int? id)
+        {
+            if (id.HasValue)
+            {
+                Empresa empresa = gerenciador.Obter(id);
+                if (empresa != null)
+                    return View(empresa);
+            }
+            return RedirectToAction("ListagemDistribuidoras");
+        }
+
+        [HttpPost]
+        public ActionResult EditEmpresa(int id, Empresa empresa)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    gerenciador.Editar(empresa);
+                    return RedirectToAction("ListagemDistribuidoras");
+                }
+            }
+            catch
+            {
+
+            }
+            return View();
+        }
 
         public ActionResult Delete(int? id)
         {
