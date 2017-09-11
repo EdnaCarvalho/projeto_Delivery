@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Model.Models.Produto>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<center>
+    <div class="row ">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <div style="padding: 10px;">
+                <div class="row thumbnail">
+                    <h2>Produto</h2>
+                    <hr />
+
+                    @if (Model == null)
+                    {
+                        <p> Nenhum produto cadastrado. </p>
+                    }
+
+                    else
+                    {
+                            WebGrid tabela = new WebGrid(source: Model, rowsPerPage: 3, canPage: true,
+                            canSort: true, defaultSort: "Produto");
+                            @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
+                            emptyRowCellValue: "---", mode: WebGridPagerModes.All, numericLinksCount: 2,
+                            tableStyle: "table",
+                            columns: tabela.Columns(
+                                tabela.Column("TipoProduto.Tipo", "Tipo"),
+                                tabela.Column("TipoProduto.Marca", "Marca"),
+                                tabela.Column("TipoProduto.Descricao", "Descrição"),
+                                tabela.Column("Preco", "Preço"),
+                                tabela.Column("Quantidade", "Quantidade"),
+                                tabela.Column("Ações", "Ações", canSort: false,
+                                format: (item) => new HtmlString(String.Format("{0}   {1}", new object[] {
+                                Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
+                                   }))
+                                )
+                            )
+                        );
+                       }
+                    <br />
+                    <p>
+                        @Html.ActionLink("Criar Novo", "Create", new { Controller = "Produto" }, new { @class = "btn btn-default" })
+                    </p>
+                </div>
+          </div>
+      </div>
+   </div>
+</center>

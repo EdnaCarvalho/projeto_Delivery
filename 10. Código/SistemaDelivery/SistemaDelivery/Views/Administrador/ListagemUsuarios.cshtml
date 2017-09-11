@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Model.Models.Usuario>
+
+@{
+    ViewBag.Title = "ListagemUsuarios";
+}
+
+<center>
+    <div class="row ">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <div style="padding: 10px;">
+                <div class="row thumbnail">
+                    <h2>Usuários</h2>
+                    <hr />
+                    @if (Model == null)
+                    {
+                        <p> Nenhum Cliente Cadastrado. </p>
+                    }
+                    else
+                    {
+                        WebGrid tabela = new WebGrid(source: Model, rowsPerPage: 4, canPage: true,
+                        canSort: true, defaultSort: "Usuario");
+                        @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
+                        emptyRowCellValue: "___", mode: WebGridPagerModes.All, numericLinksCount: 2,
+                        tableStyle: "table",
+                        columns: tabela.Columns(
+                            tabela.Column("Nome", "Nome"),
+                            tabela.Column("Telefone", "Telefone"),
+                            tabela.Column("IsAdmin", "Usuario", format:(item)=>((item.IsAdmin)? "Administrador" : "Cliente")),
+                            tabela.Column("Ações", "Ações", canSort: false,
+                                format: (item) => new HtmlString(String.Format("{0} {1} {2}", new object[] {
+                                    Html.ActionLink("Editar", "EditarUsuario", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                    Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                    Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
+                                }))
+            )
+        )
+    );
+                    }
+                    <p>
+                        @Html.ActionLink("Adicionar Novo", "Create", new { Controller = "Administrador" }, new { @class = "btn btn-default" })
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</center>
+

@@ -1,0 +1,9 @@
+packages/
+Model/bin/
+Model/obj/
+Negocio/bin/
+Negocio/obj/
+Persistencia/bin/
+Persistencia/obj/
+SistemaDelivery/bin/
+SistemaDelivery/obj/

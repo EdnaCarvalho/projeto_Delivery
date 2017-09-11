@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}   
+
+<center>
+    <h1>Delivery Água&Gás</h1>
+    <hr />
+    <div class="row ">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <div style="padding: 10px;">
+                <div class="row thumbnail">
+                    <h2>Acessar</h2>
+                    <br />
+                    <div class="" input-group input-group-sm col-lg-12">
+
+                        <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon3">
+                        <br />
+
+                    </div>
+                    <div class="" input-group input-group-sm col-lg-12">
+                        <input type="password" class="form-control" placeholder="senha" aria-describedby="sizing-addon3">
+                        <br />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <a href="#" class="navbar-link">@Html.ActionLink("Esqueceu a senha?", "AlterarSenha")</a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="#" class="navbar-link">@Html.ActionLink("Cadastre-se", "Create", "Cliente")</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <button type="submit" class="btn btn-default">@Html.ActionLink("ENTRAR", "Create", "Cliente")</button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+</center>

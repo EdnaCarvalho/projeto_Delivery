@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title -DeliveryAgua&Gas</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    <div style=" font-family:'Times New Roman'; color:#FFFFFF; background-color: darkslateblue" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand pull-right"><img src="~/Content/imagem/ag.png" style="width:50px;height:50px;"/></a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
+                @*@Html.ActionLink("DELIVERYÁGUA&GÁS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    @if (!Request.IsAuthenticated)
+                    {
+                        //TODO valta para todos o menu de Pedidos
+                <!--ADMINISTRADOR -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                DISTRIBUIDORAS
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <p class="dropdown-item">@Html.ActionLink("CADASTRADAS", "ListagemDistribuidoras", "Empresa")</p>
+                                <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVA", "Create", "Empresa")</p>
+                            </div>
+                        </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            USUARIOS
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <p class="dropdown-item">@Html.ActionLink("CADASTRADOS", "ListagemUsuarios", "Administrador")</p>
+                                            <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Administrador")</p>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            MEU PERFIL
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Administrador")</p>
+                                            <p class="dropdown-item">@Html.ActionLink("EDITAR DADOS", "Edit", "Administrador")</p>
+                                        </div>
+                                    </li>
+
+                        //Cliente
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                MEU PERFIL
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Cliente")</p>
+                                <p class="dropdown-item">@Html.ActionLink("EDITAR DADOS", "Edit", "Cliente")</p>
+                            </div>
+                        </li>
+
+
+                <!--EMPRESA-->
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            PRODUTOS
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <p class="dropdown-item">@Html.ActionLink("CADASTRADOS", "Index", "Produto")</p>
+                                            <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Produto")</p>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            MEU PERFIL
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Empresa")</p>
+                                            <p class="dropdown-item">@Html.ActionLink("EDITAR DADOS", "Edit", "Empresa")</p>
+                                        </div>
+                                    </li>
+                    <!--TODOS-->
+                                    <li>@Html.ActionLink(" SAIR ", "Index", "Home")</li>
+
+                    }
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <hr />
+    @RenderBody()
+    <hr />
+    <div class="panel-footer">
+        <p>&copy; @DateTime.Now.Year -Delivery Água e Gás trazendo o produto para pertinho de VOCÊ!</p>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
