@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
+using SistemaDelivery.Util;
 
 namespace SistemaDelivery.Controllers
 {
@@ -145,7 +147,7 @@ namespace SistemaDelivery.Controllers
 
         public ActionResult ListagemUsuarios()
         {
-            List<Usuario> usuarios = gerenciador.ObterTodos();
+            List<Usuario> usuarios = gerenciador.ObterTodos().Where(u => u.Id != ((Usuario)SessionHelper.Get(SessionKeys.Usuario)).Id).ToList();
             if (usuarios == null || usuarios.Count == 0)
                 usuarios = null;
             return View(usuarios);

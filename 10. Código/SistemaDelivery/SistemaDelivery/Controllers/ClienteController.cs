@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
+using SistemaDelivery.Util;
 
 namespace SistemaDelivery.Controllers
 {
@@ -14,25 +15,16 @@ namespace SistemaDelivery.Controllers
             gerenciador = new GerenciadorUsuario();
         }
 
-
         public ActionResult Index()
         {
             return View();
         }
 
-       
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        
         public ActionResult Create()
         {
             return View();
         }
 
-        
         [HttpPost]
         public ActionResult Create(Usuario Cliente)
         {
@@ -42,6 +34,7 @@ namespace SistemaDelivery.Controllers
                 {
                     Cliente.IsAdmin = false;
                     gerenciador.Adicionar(Cliente);
+                    SessionHelper.Set(SessionKeys.Usuario, Cliente);
                     return RedirectToAction("Index");
                 }
 

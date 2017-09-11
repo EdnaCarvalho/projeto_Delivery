@@ -9,11 +9,14 @@ namespace SistemaDelivery.Controllers
     public class ProdutoController : Controller
     {
         private GerenciadorProduto gerenciador;
-        private Empresa empresa = (Empresa)SessionHelper.Set(SessionKeys.Empresa, new Empresa() { Id = 1 }); //TODO: Remover quando implementar autenticação.
+        private Empresa empresa;
 
         public ProdutoController()
         {
-            empresa = (Empresa)SessionHelper.Get(SessionKeys.Empresa);
+            if(SessionHelper.Get(SessionKeys.Empresa) != null)
+                empresa = (Empresa)SessionHelper.Get(SessionKeys.Empresa);
+            else
+                empresa = (Empresa)SessionHelper.Set(SessionKeys.Empresa, new Empresa() { Id = 1 }); //TODO: Remover quando implementar autenticação.
             gerenciador = new GerenciadorProduto();
         }
 
