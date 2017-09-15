@@ -13,10 +13,10 @@ namespace SistemaDelivery.Controllers
 
         public ProdutoController()
         {
-            if(SessionHelper.Get(SessionKeys.Empresa) != null)
-                empresa = (Empresa)SessionHelper.Get(SessionKeys.Empresa);
+            if (SessionHelper.Get(SessionKeys.Pessoa) != null)
+                empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
             else
-                empresa = (Empresa)SessionHelper.Set(SessionKeys.Empresa, new Empresa() { Id = 1 }); //TODO: Remover quando implementar autenticação.
+                empresa = (Empresa)SessionHelper.Set(SessionKeys.Pessoa, new Empresa() { Id = 1 }); //TODO: Remover quando implementar autenticação.
             gerenciador = new GerenciadorProduto();
         }
 
@@ -84,10 +84,12 @@ namespace SistemaDelivery.Controllers
         {
             try
             {
-                produto.Empresa = empresa;                
-                gerenciador.Editar(produto);
-                return RedirectToAction("Index");
-                
+                if (ModelState.IsValid)
+                {
+                    gerenciador.Editar(produto);
+                    return RedirectToAction("Index");
+                }
+
             }
             catch
             {
@@ -112,8 +114,11 @@ namespace SistemaDelivery.Controllers
         {
             try
             {
-                gerenciador.Remover(produto);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    gerenciador.Remover(produto);
+                    return RedirectToAction("Index");
+                }
 
             }
             catch

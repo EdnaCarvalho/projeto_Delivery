@@ -60,11 +60,11 @@ namespace SistemaDelivery.Controllers
             return View();
         }
         
-        public ActionResult Edit(int? id)
+        public ActionResult AlterarDados(int? id)
         {
             if (id.HasValue)
             {
-                Usuario administrador = gerenciador.Obter(id);
+                Usuario administrador = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
                 if (administrador != null)
                     return View(administrador);
             }
@@ -73,12 +73,13 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
-        public ActionResult Edit(int id, Usuario administrador)
+        public ActionResult AlterarDados(int id, Usuario administrador)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    SessionHelper.Set(SessionKeys.Pessoa,administrador);
                     gerenciador.Editar(administrador);
                     return RedirectToAction("Index");
                 }   
@@ -90,25 +91,25 @@ namespace SistemaDelivery.Controllers
         }
 
 
-        public ActionResult EditarUsuario(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id.HasValue)
             {
-                Usuario administrador = gerenciador.Obter(id);
-                if (administrador != null)
-                    return View(administrador);
+                Usuario usuario = gerenciador.Obter(id);
+                if (usuario != null)
+                    return View(usuario);
             }
             return RedirectToAction("ListagemUsuarios");
         }
 
         [HttpPost]
-        public ActionResult EditarUsuario(int id, Usuario administrador)
+        public ActionResult Edit(int id, Usuario usuario)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    gerenciador.Editar(administrador);
+                    gerenciador.Editar(usuario);
                     return RedirectToAction("ListagemUsuarios");
                 }
             }
@@ -122,21 +123,24 @@ namespace SistemaDelivery.Controllers
         {
             if (id.HasValue)
             {
-                Usuario administrador = gerenciador.Obter(id);
-                if (administrador != null)
-                    return View(administrador);
+                Usuario usuario = gerenciador.Obter(id);
+                if (usuario != null)
+                    return View(usuario);
             }
             return RedirectToAction("ListagemUsuarios");
         }
 
         
         [HttpPost]
-        public ActionResult Delete(int id, Usuario administrador)
+        public ActionResult Delete(int id, Usuario usuario)
         {
             try
             {
-                gerenciador.Remover(administrador);
-                return RedirectToAction("ListagemUsuarios");                
+                if (ModelState.IsValid)
+                {
+                    gerenciador.Remover(usuario);
+                    return RedirectToAction("ListagemUsuarios");
+                }
             }
             catch
             {
@@ -147,7 +151,7 @@ namespace SistemaDelivery.Controllers
 
         public ActionResult ListagemUsuarios()
         {
-            List<Usuario> usuarios = gerenciador.ObterTodos().Where(u => u.Id != ((Usuario)SessionHelper.Get(SessionKeys.Usuario)).Id).ToList();
+            List<Usuario> usuarios = gerenciador.ObterTodos().Where(u => u.Id != ((Usuario)SessionHelper.Get(SessionKeys.Pessoa)).Id).ToList();
             if (usuarios == null || usuarios.Count == 0)
                 usuarios = null;
             return View(usuarios);

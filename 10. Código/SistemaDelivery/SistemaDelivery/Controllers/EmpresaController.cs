@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
+using SistemaDelivery.Util;
 
 namespace SistemaDelivery.Controllers
 {
@@ -13,6 +14,7 @@ namespace SistemaDelivery.Controllers
         {
             gerenciador = new GerenciadorEmpresa();
         }
+
         public ActionResult Index()
         {
             return View();
@@ -52,11 +54,11 @@ namespace SistemaDelivery.Controllers
             return View();
         }
 
-        public ActionResult Edit(int? id)
+        public ActionResult AlterarDados(int? id)
         {
             if (id.HasValue)
             {
-                Empresa empresa = gerenciador.Obter(id);
+                Empresa empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
                 if (empresa != null)
                     return View(empresa);
             }
@@ -64,12 +66,13 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, Empresa empresa)
+        public ActionResult AlterarDados(int id, Empresa empresa)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    SessionHelper.Set(SessionKeys.Pessoa,empresa);
                     gerenciador.Editar(empresa);
                     return RedirectToAction("Index");
                 }
@@ -80,7 +83,7 @@ namespace SistemaDelivery.Controllers
             }
             return View();
         }
-        public ActionResult EditEmpresa(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id.HasValue)
             {
@@ -92,7 +95,7 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditEmpresa(int id, Empresa empresa)
+        public ActionResult Edit(int id, Empresa empresa)
         {
             try
             {
@@ -126,8 +129,11 @@ namespace SistemaDelivery.Controllers
         {
             try
             {
-                gerenciador.Remover(empresa);
-                return RedirectToAction("ListagemDistribuidoras");
+                if (ModelState.IsValid)
+                {
+                    gerenciador.Remover(empresa);
+                    return RedirectToAction("ListagemDistribuidoras");
+                }
             }
             catch
             {

@@ -34,10 +34,9 @@ namespace SistemaDelivery.Controllers
                 {
                     Cliente.IsAdmin = false;
                     gerenciador.Adicionar(Cliente);
-                    SessionHelper.Set(SessionKeys.Usuario, Cliente);
+                    SessionHelper.Set(SessionKeys.Pessoa, Cliente);
                     return RedirectToAction("Index");
                 }
-
             }
             catch
             {
@@ -47,12 +46,11 @@ namespace SistemaDelivery.Controllers
         }
 
         
-        public ActionResult Edit(int? id)
+        public ActionResult AlterarDados(int? id)
         {
-
             if (id.HasValue)
             {
-                Usuario cliente = gerenciador.Obter(id);
+                Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
                 if (cliente != null)
                     return View(cliente);
             }
@@ -61,12 +59,13 @@ namespace SistemaDelivery.Controllers
 
         
         [HttpPost]
-        public ActionResult Edit(int id, Usuario cliente)
+        public ActionResult AlterarDados(int id, Usuario cliente)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     gerenciador.Editar(cliente);
                     return RedirectToAction("Index");
                 }
@@ -76,26 +75,7 @@ namespace SistemaDelivery.Controllers
                 
             }
             return RedirectToAction("Index");
-        }
-
-        
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-        
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        }        
 
         public ActionResult AlterarSenha()
         {

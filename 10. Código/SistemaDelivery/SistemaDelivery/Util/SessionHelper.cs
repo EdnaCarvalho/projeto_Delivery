@@ -3,7 +3,7 @@ using System.Web;
 
 namespace SistemaDelivery.Util
 {
-    public enum SessionKeys { Empresa, Usuario}
+    public enum SessionKeys {Pessoa}
 
     public static class SessionHelper
     {

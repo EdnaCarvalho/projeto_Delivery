@@ -29,7 +29,7 @@
                             tabela.Column("IsAdmin", "Usuario", format:(item)=>((item.IsAdmin)? "Administrador" : "Cliente")),
                             tabela.Column("Ações", "Ações", canSort: false,
                                 format: (item) => new HtmlString(String.Format("{0} {1} {2}", new object[] {
-                                    Html.ActionLink("Editar", "EditarUsuario", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                    Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                     Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                     Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
                                 }))

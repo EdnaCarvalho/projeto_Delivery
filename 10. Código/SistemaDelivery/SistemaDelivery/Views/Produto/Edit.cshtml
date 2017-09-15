@@ -23,19 +23,19 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.TipoProduto.Tipo, htmlAttributes: new { @class = "control-label col-md-5" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.TipoProduto.Tipo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.DisplayFor(model => model.TipoProduto.Tipo, new { htmlAttributes = new { @class = "control-label col-md-5" } })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.TipoProduto.Marca, htmlAttributes: new { @class = "control-label col-md-5" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.TipoProduto.Marca, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.DisplayFor(model => model.TipoProduto.Marca, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.TipoProduto.Descricao, htmlAttributes: new { @class = "control-label col-md-5" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.TipoProduto.Descricao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.DisplayFor(model => model.TipoProduto.Descricao, new { htmlAttributes = new { @class = "form-control"} })
                     </div>
                 </div>
                 <div class="form-group">

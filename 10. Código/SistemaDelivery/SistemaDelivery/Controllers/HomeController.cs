@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Model.Models;
 
 namespace SistemaDelivery.Controllers
 {
@@ -13,6 +14,9 @@ namespace SistemaDelivery.Controllers
         {
             return View();
         }
-      
+        public ActionResult Login()
+        {
+            return View();
+        }
     }
 }
