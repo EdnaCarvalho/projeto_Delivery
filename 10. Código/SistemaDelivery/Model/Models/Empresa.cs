@@ -19,15 +19,16 @@ namespace Model.Models
 
         #region Propriedades
 
-        [Required(ErrorMessage = "Campo Obrigatório")]
+        [Required(ErrorMessage = "O status é obrigatório")]
         public string Status
         {
             get { return status; }
             set { status = value; }
         }
 
-        [Required(ErrorMessage = "Campo Obrigatório")]
-        [StringLength(15, MinimumLength = 5)]
+        [Required(ErrorMessage = "O CPF é obrigatório")]
+        [StringLength(11, ErrorMessage = "Deve conter apenas os dígitos.")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]
         public string Cpf
         {
             get { return cpf; }
@@ -35,17 +36,19 @@ namespace Model.Models
         }
 
 
-        [Required(ErrorMessage = "Campo Obrigatório")]
+        [Required(ErrorMessage = "O CNPJ é obrigatório")]
         [StringLength(50, MinimumLength = 5)]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]
         public string Cnpj
         {
             get { return cnpj; }
             set { cnpj = value; }
         }
 
-        [Required]
-        [StringLength(50, MinimumLength = 10)]
-        [Display(Name = "Proprietário")]
+        [Required(ErrorMessage = "O nome do proprietario é obrigatório.")]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Por favor digitar o nome completo.")]
+        [DataType(DataType.Text)]
+        [Display(Name = "Nome Completo")]
         public string Proprietario
         {
             get { return proprietario; }

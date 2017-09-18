@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Persistence\RepositorioEmpresa.cs" />
     <Compile Include="Persistence\RepositorioPedido.cs" />
+    <Compile Include="Persistence\RepositorioPessoa.cs" />
     <Compile Include="Persistence\RepositorioProduto.cs" />
     <Compile Include="Persistence\RepositorioUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

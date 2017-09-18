@@ -46,6 +46,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Mensagens.resx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Exceptions\AplicacaoException.cs" />
     <Compile Include="Models\Exceptions\ControllerException.cs" />
     <Compile Include="Models\Exceptions\ModelException.cs" />

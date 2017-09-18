@@ -33,12 +33,12 @@
                                     Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                     Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
                                 }))
-            )
-        )
-    );
-                    }
+                                )
+                            )
+                        );
+                      }
                     <p>
-                        @Html.ActionLink("Adicionar Novo", "Create", new { Controller = "Administrador" }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Adicionar Novo", "Create", new { controller = "Administrador" }, new { @class = "btn btn-default" })
                     </p>
 
                 </div>

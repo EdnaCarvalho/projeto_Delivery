@@ -24,7 +24,7 @@ namespace Model.Models
             set { id = value; }
         }
         
-        [Required]
+        [Required (ErrorMessage = "O preço é obrigatório.")]
         [Display(Name = "Preco por Unidade")]
         [DataType(DataType.Text)]
         [DisplayFormat(DataFormatString = "{0:C}")]
@@ -34,7 +34,7 @@ namespace Model.Models
             set { preco = value; }
         }
 
-        [Required]
+        [Required (ErrorMessage = "A quantidade é obrigatório. Serve para controle de estoque.")]
         [Display(Name = "Quantidade do Produto")]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[0-9]+$")]

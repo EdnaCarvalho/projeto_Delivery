@@ -110,13 +110,13 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, Produto produto)
+        public ActionResult Delete(int id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    gerenciador.Remover(produto);
+                    gerenciador.Remover(new Produto { Id= id});
                     return RedirectToAction("Index");
                 }
 

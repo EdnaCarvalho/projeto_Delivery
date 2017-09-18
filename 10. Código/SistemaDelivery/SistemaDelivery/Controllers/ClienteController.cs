@@ -8,11 +8,11 @@ namespace SistemaDelivery.Controllers
     public class ClienteController : Controller
     {
 
-        private GerenciadorUsuario gerenciador;
+        private GerenciadorPessoa gerenciador;
 
         public ClienteController()
         {
-            gerenciador = new GerenciadorUsuario();
+            gerenciador = new GerenciadorPessoa();
         }
 
         public ActionResult Index()

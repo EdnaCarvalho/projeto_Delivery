@@ -16,7 +16,7 @@ namespace Model.Models
 
         #region Propriedades
 
-        [Required(ErrorMessage = "Campo Obrigatorio")]
+        [Required(ErrorMessage = " Nome da cidade é obrigatório")]
         [StringLength(50, MinimumLength = 5)]
         [DataType(DataType.Text)]
         [Display(Name = "Cidade")]
@@ -26,7 +26,7 @@ namespace Model.Models
             set { cidade = value; }
         }
 
-        [Required(ErrorMessage = "Campo Obrigatorio")]
+        [Required(ErrorMessage = "O bairro é obrigatório")]
         [StringLength(50, MinimumLength = 5)]
         [DataType(DataType.Text)]
         [Display(Name = "Bairro")]
@@ -36,8 +36,8 @@ namespace Model.Models
             set { bairro = value; }
         }
 
-        [Required(ErrorMessage = "Campo Obrigatorio")]
-        [StringLength(50, MinimumLength = 5)]
+        [Required(ErrorMessage = "O endereco obrigatório")]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Por favor digitar o endereço.")]
         [DataType(DataType.Text)]
         [Display(Name = "Endereco")]
         public string RuaAv
@@ -46,7 +46,7 @@ namespace Model.Models
             set { ruaAv = value; }
         }
 
-        [Required(ErrorMessage = "Campo Obrigatorio")]
+        [Required(ErrorMessage = "O número é obrigatório. Caso não tenha digitar S/N. ")]
         [StringLength(10, MinimumLength = 1)]
         [DataType(DataType.Text)]
         [Display(Name = "Nº ")]
@@ -56,8 +56,8 @@ namespace Model.Models
             set { numero = value; }
         }
 
-        [Required(ErrorMessage = "Campo Obrigatorio")]
-        [StringLength(2)]
+        [Required(ErrorMessage = "O estado é obrigatório.")]
+        [StringLength(2, ErrorMessage = "Digitar apenas o UF do estado.")]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[A-Za-z]+$")]
         [Display(Name = "UF")]

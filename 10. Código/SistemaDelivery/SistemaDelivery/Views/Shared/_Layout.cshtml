@@ -12,10 +12,8 @@
 
     <div style=" font-family:'Times New Roman'; color:#FFFFFF; background-color: darkslateblue" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand pull-right"><img src="~/Content/imagem/ag.png" style="width:50px;height:50px;"/></a>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
-                @*@Html.ActionLink("DELIVERYÁGUA&GÁS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+            <div class="navbar-header"></div>
+                @Html.ActionLink("DELIVERYÁGUA&GÁS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -88,7 +86,7 @@
                                     </li>
                     <!--TODOS-->
                                     <li>@Html.ActionLink(" SAIR ", "Index", "Home")</li>
-
+                                    <li>@Html.ActionLink(" ACESSAR", "Login", "Home")</li>
                     }
                 </ul>
             </div>

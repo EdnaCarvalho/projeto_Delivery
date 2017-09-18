@@ -8,11 +8,11 @@ namespace SistemaDelivery.Controllers
 {
     public class EmpresaController : Controller
     {
-        private GerenciadorEmpresa gerenciador;
+        private GerenciadorPessoa gerenciador;
 
         public EmpresaController ()
         {
-            gerenciador = new GerenciadorEmpresa();
+            gerenciador = new GerenciadorPessoa();
         }
 
         public ActionResult Index()
@@ -24,7 +24,7 @@ namespace SistemaDelivery.Controllers
         {
             if (id.HasValue)
             {
-                Empresa empresa = gerenciador.Obter(id);
+                Empresa empresa = gerenciador.ObterEmpresa(id);
                 if(empresa != null)
                     return View(empresa);
             }
@@ -87,7 +87,7 @@ namespace SistemaDelivery.Controllers
         {
             if (id.HasValue)
             {
-                Empresa empresa = gerenciador.Obter(id);
+                Empresa empresa = gerenciador.ObterEmpresa(id);
                 if (empresa != null)
                     return View(empresa);
             }
@@ -117,7 +117,7 @@ namespace SistemaDelivery.Controllers
 
             if (id.HasValue)
             {
-                Empresa empresa = gerenciador.Obter(id);
+                Empresa empresa = gerenciador.ObterEmpresa(id);
                 if (empresa != null)
                     return View(empresa);
             }
@@ -125,13 +125,13 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, Empresa empresa)
+        public ActionResult Delete(int id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    gerenciador.Remover(empresa);
+                    gerenciador.Remover(new Empresa { Id = id });
                     return RedirectToAction("ListagemDistribuidoras");
                 }
             }
@@ -144,7 +144,7 @@ namespace SistemaDelivery.Controllers
         public ActionResult ListagemDistribuidoras()
         {
             
-            List<Empresa> empresa = gerenciador.ObterTodos();
+            List<Empresa> empresa = gerenciador.ObterEmpresas();
             if (empresa == null || empresa.Count == 0)
                 empresa = null;
             return View(empresa);

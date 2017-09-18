@@ -4,18 +4,19 @@ using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
 using SistemaDelivery.Util;
+using System.Web.Security;
 
 namespace SistemaDelivery.Controllers
 {
     public class AdministradorController : Controller
     {
 
-        private GerenciadorUsuario gerenciador;
+        private GerenciadorPessoa gerenciador;
 
 
         public AdministradorController()
         {
-            gerenciador = new GerenciadorUsuario();
+            gerenciador = new GerenciadorPessoa();
         }
         
         public ActionResult Index()
@@ -28,7 +29,7 @@ namespace SistemaDelivery.Controllers
         {
             if (id.HasValue)
             {
-                Usuario administrador = gerenciador.Obter(id);
+                Usuario administrador = gerenciador.ObterUsuario(id);
                 if (administrador != null)
                     return View(administrador);
             }
@@ -95,7 +96,7 @@ namespace SistemaDelivery.Controllers
         {
             if (id.HasValue)
             {
-                Usuario usuario = gerenciador.Obter(id);
+                Usuario usuario = gerenciador.ObterUsuario(id);
                 if (usuario != null)
                     return View(usuario);
             }
@@ -123,7 +124,7 @@ namespace SistemaDelivery.Controllers
         {
             if (id.HasValue)
             {
-                Usuario usuario = gerenciador.Obter(id);
+                Usuario usuario = gerenciador.ObterUsuario(id);
                 if (usuario != null)
                     return View(usuario);
             }
@@ -132,13 +133,13 @@ namespace SistemaDelivery.Controllers
 
         
         [HttpPost]
-        public ActionResult Delete(int id, Usuario usuario)
+        public ActionResult Delete(int id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    gerenciador.Remover(usuario);
+                    gerenciador.Remover(new Usuario { Id = id });
                     return RedirectToAction("ListagemUsuarios");
                 }
             }
@@ -151,7 +152,7 @@ namespace SistemaDelivery.Controllers
 
         public ActionResult ListagemUsuarios()
         {
-            List<Usuario> usuarios = gerenciador.ObterTodos().Where(u => u.Id != ((Usuario)SessionHelper.Get(SessionKeys.Pessoa)).Id).ToList();
+            List<Usuario> usuarios = gerenciador.ObterUsuarios().Where(u => u.Id != ((Usuario)SessionHelper.Get(SessionKeys.Pessoa)).Id).ToList();
             if (usuarios == null || usuarios.Count == 0)
                 usuarios = null;
             return View(usuarios);

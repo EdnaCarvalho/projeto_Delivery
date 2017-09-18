@@ -32,8 +32,8 @@ namespace Model.Models
             set { id = value; }
         }
 
-        [Required(ErrorMessageResourceName = "NomeRequerido", ErrorMessageResourceType = typeof(Mensagens))]
-        [StringLength(50, MinimumLength = 5)]
+        [Required(ErrorMessage= "O nome completo é obrigatório.")]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Por favor digitar o nome completo.")]
         [DataType(DataType.Text)]
         [Display(Name = "Nome Completo")]
         public string Nome
@@ -42,8 +42,8 @@ namespace Model.Models
             set { nome = value; }
         }
 
-        [Required(ErrorMessageResourceName = "EmailRequerido", ErrorMessageResourceType = typeof(Mensagens))]
-        [StringLength(50, MinimumLength = 5)]
+        [Required(ErrorMessage = "O email é obrigatório.")]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Email inválido.")]
         [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
@@ -53,10 +53,10 @@ namespace Model.Models
             set { email = value; }
         }
 
-        [Required]
+        [Required (ErrorMessage = "O telefone é obrigatória.")]
         [StringLength(12)]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^[0-9]+$")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]
         [Display(Name = "Telefone")]
         public string Telefone
         {
@@ -64,18 +64,16 @@ namespace Model.Models
             set { telefone = value; }
         }
 
-        [Required(ErrorMessageResourceName = "SenhaRequerida", ErrorMessageResourceType = typeof(Mensagens))]
-        [StringLength(10, MinimumLength = 5)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "A senha é obrigatória.")]
+        [StringLength(15, MinimumLength = 5, ErrorMessage = "Deve possuir uma quantidade de caracteres entre 5 e 15.")]
+        [RegularExpression(@"^[a-zA-Z0-9_@#$%&]{5,15}$", ErrorMessage = "Digite uma senha válida. Use letras, números e os caracteres especiais _ @ # $ % &.")]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^[A-Za-z0-9_]+$")]
-        [Display(Name = "Senha")]
         public string Senha
         {
             get { return senha; }
             set { senha = value; }
         }
-
-        [Required(ErrorMessageResourceName = "SenhaDiferente", ErrorMessageResourceType = typeof(Mensagens))]
+        [Required]
         [DataType(DataType.Password)]
         [Compare("Senha")]
         [Display(Name = "Confirmar Senha")]
@@ -85,19 +83,20 @@ namespace Model.Models
             set { confirmarSenha = value; }
         }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "O login é obrigatório.")]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "Deve possuir uma quantidade de caracteres entre 5 e 20.")]
+        [RegularExpression(@"^[a-zA-Z0-9_]{5,20}$", ErrorMessage = "Digite um login válido. Use letras, números e underscore ( _ ).")]
+        public string Login
+        {
+            get { return login; }
+            set { login = value; }
+        }
+
         [Required]
         public Endereco Endereco
         {
             get { return endereco; }
             set { endereco = value; }
-        }
-
-        [Required(ErrorMessageResourceName = "LoginRequerido", ErrorMessageResourceType = typeof(Mensagens))]
-        [StringLength(20, MinimumLength = 5)]
-        public string Login
-        {
-            get { return login; }
-            set { login = value; }
         }
 
         public List<Pedido> Pedidos
