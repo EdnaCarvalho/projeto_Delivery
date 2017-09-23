@@ -26,15 +26,18 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Usuario Cliente)
+        public ActionResult Create(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Cliente.IsAdmin = false;
-                    gerenciador.Adicionar(Cliente);
-                    SessionHelper.Set(SessionKeys.Pessoa, Cliente);
+                    collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
+                    Usuario cliente = new Usuario();
+                    cliente.IsAdmin = false;
+                    TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
+                    gerenciador.Adicionar(cliente);
+                    SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     return RedirectToAction("Index");
                 }
             }

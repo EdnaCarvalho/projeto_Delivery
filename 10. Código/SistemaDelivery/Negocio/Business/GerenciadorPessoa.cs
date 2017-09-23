@@ -34,8 +34,10 @@ namespace Negocio.Business
             Pessoa pessoa = persistencia.ObterUsuario(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
                 e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
             if (pessoa == null)
+            {
                 pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
                     e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
+            }
             return pessoa;
         }
 
