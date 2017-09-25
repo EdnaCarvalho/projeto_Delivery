@@ -26,13 +26,18 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
+<<<<<<< HEAD
         [ValidateAntiForgeryToken]
         public ActionResult Create(FormCollection collection)
+=======
+        public ActionResult Create(Usuario Cliente)
+>>>>>>> parent of 78e5ff4... Apenas abertura do projeto
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+<<<<<<< HEAD
                     collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
                     Usuario cliente = new Usuario();
                     TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
@@ -43,6 +48,12 @@ namespace SistemaDelivery.Controllers
                         SessionHelper.Set(SessionKeys.Pessoa, cliente);
                         return RedirectToAction("Index");
                     }
+=======
+                    Cliente.IsAdmin = false;
+                    gerenciador.Adicionar(Cliente);
+                    SessionHelper.Set(SessionKeys.Pessoa, Cliente);
+                    return RedirectToAction("Index");
+>>>>>>> parent of 78e5ff4... Apenas abertura do projeto
                 }
             }
             catch

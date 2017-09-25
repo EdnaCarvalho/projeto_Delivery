@@ -67,6 +67,7 @@ namespace SistemaDelivery.Controllers
             return View();
         }
 
+<<<<<<< HEAD
         [Authenticated]
         public ActionResult Logout()
         {
@@ -78,5 +79,7 @@ namespace SistemaDelivery.Controllers
             return RedirectToAction("Login", "Home");
         }
 
+=======
+>>>>>>> parent of 78e5ff4... Apenas abertura do projeto
     }
 }
