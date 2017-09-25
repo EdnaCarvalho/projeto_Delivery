@@ -35,11 +35,14 @@ namespace SistemaDelivery.Controllers
                 {
                     collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
                     Usuario cliente = new Usuario();
-                    cliente.IsAdmin = false;
                     TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
-                    gerenciador.Adicionar(cliente);
-                    SessionHelper.Set(SessionKeys.Pessoa, cliente);
-                    return RedirectToAction("Index");
+                    if(cliente != null)
+                    {
+                        cliente.IsAdmin = false;
+                        gerenciador.Adicionar(cliente);
+                        SessionHelper.Set(SessionKeys.Pessoa, cliente);
+                        return RedirectToAction("Index");
+                    }
                 }
             }
             catch
