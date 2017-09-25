@@ -14,7 +14,7 @@ namespace SistemaDelivery.Controllers
         {
             gerenciador = new GerenciadorPessoa();
         }
-
+        
         public ActionResult Index()
         {
             return View();
@@ -26,6 +26,7 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(FormCollection collection)
         {
             try
@@ -47,14 +48,13 @@ namespace SistemaDelivery.Controllers
             }
             return View();
         }
-
         
         public ActionResult AlterarDados(int? id)
         {
             if (id.HasValue)
             {
                 Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
-                if (cliente != null)
+                if (cliente != null )
                     return View(cliente);
             }
             return RedirectToAction("Index");
@@ -62,12 +62,15 @@ namespace SistemaDelivery.Controllers
 
         
         [HttpPost]
-        public ActionResult AlterarDados(int id, Usuario cliente)
+        public ActionResult AlterarDados(int id, FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
+                    Usuario cliente = new Usuario();
+                    TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
                     SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     gerenciador.Editar(cliente);
                     return RedirectToAction("Index");
@@ -78,7 +81,7 @@ namespace SistemaDelivery.Controllers
                 
             }
             return RedirectToAction("Index");
-        }        
+        }
 
         public ActionResult AlterarSenha()
         {

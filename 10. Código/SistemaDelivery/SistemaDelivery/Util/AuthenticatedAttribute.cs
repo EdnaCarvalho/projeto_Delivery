@@ -18,7 +18,7 @@ namespace SistemaDelivery.Util
                 HttpContext.Current.Session.Abandon();
                 RouteValueDictionary rota = new RouteValueDictionary();
                 rota["controller"] = "Home";
-                rota["action"] = "Index";
+                rota["action"] = "Login";
                 filterContext.Result = new RedirectToRouteResult(rota);
             }
             base.OnActionExecuting(filterContext);

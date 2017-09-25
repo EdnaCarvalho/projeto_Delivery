@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model.Models;
-
+using Model.Models.Exceptions;
 namespace Persistencia.Persistence
 {
     public class RepositorioPessoa
@@ -18,16 +18,16 @@ namespace Persistencia.Persistence
 
         public Pessoa Adicionar(Pessoa pessoa)
         {
-            if(pessoa.GetType() == typeof(Usuario))
+            if (pessoa.GetType() == typeof(Usuario))
             {
-                 pessoa.Id = listaUsuario.Count + 1;
-                 listaUsuario.Add((Usuario) pessoa);
+                pessoa.Id = listaUsuario.Count + 1;
+                listaUsuario.Add((Usuario)pessoa);
             }
             else
             {
                 pessoa.Id = listaEmpresa.Count + 1;
                 listaEmpresa.Add((Empresa)pessoa);
-            }           
+            }
             return pessoa;
         }
 
@@ -36,13 +36,13 @@ namespace Persistencia.Persistence
             if (pessoa.GetType() == typeof(Usuario))
             {
                 int posicao = listaUsuario.FindIndex(e => e.Id == pessoa.Id);
-                listaUsuario[posicao] = (Usuario) pessoa;
+                listaUsuario[posicao] = (Usuario)pessoa;
             }
             else
             {
                 int posicao = listaEmpresa.FindIndex(e => e.Id == pessoa.Id);
                 listaEmpresa[posicao] = (Empresa)pessoa;
-            }            
+            }
         }
 
         public void Remover(Pessoa pessoa)
@@ -61,7 +61,7 @@ namespace Persistencia.Persistence
 
         public Empresa ObterEmpresa(Func<Empresa, bool> where)
         {
-            
+
             return listaEmpresa.Where(where).FirstOrDefault();
         }
 

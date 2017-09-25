@@ -66,5 +66,17 @@ namespace SistemaDelivery.Controllers
             // Se ocorrer algum erro, reexibe o formulário.
             return View();
         }
+
+        [Authenticated]
+        public ActionResult Logout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                FormsAuthentication.SignOut();
+                Session.Abandon();
+            }
+            return RedirectToAction("Login", "Home");
+        }
+
     }
 }
