@@ -17,9 +17,13 @@
             </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                @if (SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) != null)
+                @if (SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) == null)
                 {
-                    Model.Models.Pessoa pessoa = SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa ) as Model.Models.Pessoa;
+                    <li>@Html.ActionLink(" ACESSAR", "Login", "Home")</li>
+                }
+                else
+                {
+                    Model.Models.Pessoa pessoa = SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) as Model.Models.Pessoa;
                     if (typeof(Model.Models.Empresa) == pessoa.GetType())
                     {
                      <!--EMPRESA-->
@@ -98,9 +102,7 @@
                     }
                     <!--TODOS-->
                     <li>@Html.ActionLink(" SAIR ", "Logout", "Home")</li>
-                }              
-
-                <li>@Html.ActionLink(" ACESSAR", "Login", "Home")</li>
+                }
             </ul>
         </div>
       </div>
