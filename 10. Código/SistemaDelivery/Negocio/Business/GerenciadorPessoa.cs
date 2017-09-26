@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Model.Models;
 using Persistencia.Persistence;
+using Model.Models.Exceptions;
+using System;
 
 namespace Negocio.Business
 {
@@ -15,48 +17,104 @@ namespace Negocio.Business
 
         public Pessoa Adicionar(Pessoa pessoa)
         {
-            persistencia.Adicionar(pessoa);
-            return pessoa;
+            try
+            {
+                persistencia.Adicionar(pessoa);
+                return pessoa;
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar adicionar objeto.", e);
+            }
         }
 
         public void Editar(Pessoa pessoa)
         {
-            persistencia.Editar(pessoa);
+            try
+            {
+                persistencia.Editar(pessoa);
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar editar objeto.", e);
+            }
         }
 
         public void Remover(Pessoa pessoa)
         {
-            persistencia.Remover(pessoa);
+            try
+            {
+                persistencia.Remover(pessoa);
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar remover objeto.", e);
+            }
         }
 
         public Pessoa ObterByLoginSenha(string login, string senha)
         {
-            Pessoa pessoa = persistencia.ObterUsuario(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
-                e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
-            if (pessoa == null)
-                pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
+            try
+            {
+                Pessoa pessoa = persistencia.ObterUsuario(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
                     e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
-            return pessoa;
+                if (pessoa == null)
+                    pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
+                        e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
+                return pessoa;
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar obter as informações do objeto.", e);
+            }
         }
 
         public Empresa ObterEmpresa(int? id)
         {
-            return persistencia.ObterEmpresa(e => e.Id == id);
+            try
+            {
+                return persistencia.ObterEmpresa(e => e.Id == id);
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar obter objeto.", e);
+            }
         }
 
         public Usuario ObterUsuario(int? id)
         {
-            return persistencia.ObterUsuario(e => e.Id == id);
+            try
+            {
+                return persistencia.ObterUsuario(e => e.Id == id);
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar obter objeto.", e);
+            }
         }
 
         public List<Empresa> ObterEmpresas()
         {
-            return persistencia.ObterEmpresas();
+            try
+            {
+                return persistencia.ObterEmpresas();
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar obter os objetos.", e);
+            }
         }
 
         public List<Usuario> ObterUsuarios()
         {
-            return persistencia.ObterUsuarios();
+            try
+            {
+                return persistencia.ObterUsuarios();
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar obter os objetos.", e);
+            }
         }
     }
 }

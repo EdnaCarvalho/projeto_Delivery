@@ -18,66 +18,115 @@ namespace Persistencia.Persistence
 
         public Pessoa Adicionar(Pessoa pessoa)
         {
-            if (pessoa.GetType() == typeof(Usuario))
+            try
             {
-                pessoa.Id = listaUsuario.Count + 1;
-                listaUsuario.Add((Usuario)pessoa);
+                if (pessoa.GetType() == typeof(Usuario))
+                {
+                    pessoa.Id = listaUsuario.Count + 1;
+                    listaUsuario.Add((Usuario)pessoa);
+                }
+                else
+                {
+                    pessoa.Id = listaEmpresa.Count + 1;
+                    listaEmpresa.Add((Empresa)pessoa);
+                }
+                return pessoa;
             }
-            else
+            catch (Exception e)
             {
-                pessoa.Id = listaEmpresa.Count + 1;
-                listaEmpresa.Add((Empresa)pessoa);
+                throw new PersistenciaException("Erro ao tentar adicionar objeto.", e);
             }
-            return pessoa;
         }
 
         public void Editar(Pessoa pessoa)
         {
-            if (pessoa.GetType() == typeof(Usuario))
+            try
             {
-                int posicao = listaUsuario.FindIndex(e => e.Id == pessoa.Id);
-                listaUsuario[posicao] = (Usuario)pessoa;
+
+                if (pessoa.GetType() == typeof(Usuario))
+                {
+                    int posicao = listaUsuario.FindIndex(e => e.Id == pessoa.Id);
+                    listaUsuario[posicao] = (Usuario)pessoa;
+                }
+                else
+                {
+                    int posicao = listaEmpresa.FindIndex(e => e.Id == pessoa.Id);
+                    listaEmpresa[posicao] = (Empresa)pessoa;
+                }
             }
-            else
+            catch (Exception e)
             {
-                int posicao = listaEmpresa.FindIndex(e => e.Id == pessoa.Id);
-                listaEmpresa[posicao] = (Empresa)pessoa;
+                throw new PersistenciaException("Erro na edição do objeto.", e);
             }
         }
 
         public void Remover(Pessoa pessoa)
         {
-            if (pessoa.GetType() == typeof(Usuario))
+            try
             {
-                int posicao = listaUsuario.FindIndex(e => e.Id == pessoa.Id);
-                listaUsuario.RemoveAt(posicao);
+                if (pessoa.GetType() == typeof(Usuario))
+                {
+                    int posicao = listaUsuario.FindIndex(e => e.Id == pessoa.Id);
+                    listaUsuario.RemoveAt(posicao);
+                }
+                else
+                {
+                    int posicao = listaEmpresa.FindIndex(e => e.Id == pessoa.Id);
+                    listaEmpresa.RemoveAt(posicao);
+                }
             }
-            else
+            catch (Exception e)
             {
-                int posicao = listaEmpresa.FindIndex(e => e.Id == pessoa.Id);
-                listaEmpresa.RemoveAt(posicao);
+                throw new PersistenciaException("Erro ao tentar remover objeto.", e);
             }
         }
 
         public Empresa ObterEmpresa(Func<Empresa, bool> where)
         {
-
-            return listaEmpresa.Where(where).FirstOrDefault();
+            try
+            {
+                return listaEmpresa.Where(where).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new PersistenciaException("Erro ao tentar obter objeto.", e);
+            }
         }
 
         public Usuario ObterUsuario(Func<Usuario, bool> where)
         {
-            return listaUsuario.Where(where).FirstOrDefault();
+            try
+            {
+                return listaUsuario.Where(where).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new PersistenciaException("Erro ao tentar obter objeto.", e);
+            }
         }
 
         public List<Empresa> ObterEmpresas()
         {
-            return listaEmpresa;
+            try
+            {
+                return listaEmpresa;
+            }
+            catch (Exception e)
+            {
+                throw new PersistenciaException("Erro ao tentar obter os objetos.", e);
+            }
         }
 
         public List<Usuario> ObterUsuarios()
         {
-            return listaUsuario;
+            try
+            {
+                return listaUsuario;
+            }
+            catch (Exception e)
+            {
+                throw new PersistenciaException("Erro ao tentar obter os objetos.", e);
+            }
         }
     }
 }

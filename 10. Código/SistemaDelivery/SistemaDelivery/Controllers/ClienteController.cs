@@ -2,6 +2,8 @@
 using Model.Models;
 using Negocio.Business;
 using SistemaDelivery.Util;
+using Model.Models.Exceptions;
+using System;
 
 namespace SistemaDelivery.Controllers
 {
@@ -14,7 +16,7 @@ namespace SistemaDelivery.Controllers
         {
             gerenciador = new GerenciadorPessoa();
         }
-        
+
         public ActionResult Index()
         {
             return View();
@@ -41,26 +43,33 @@ namespace SistemaDelivery.Controllers
                     SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     return RedirectToAction("Index");
                 }
+                return View();
             }
-            catch
+            catch (Exception e)
             {
-
+                throw new ControllerException("Erro na criação do objeto.", e);
             }
-            return View();
         }
 
         public ActionResult AlterarDados(int? id)
         {
-            if (id.HasValue)
+            try
             {
-                Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
-                if (cliente != null )
-                    return View(cliente);
+                if (id.HasValue)
+                {
+                    Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
+                    if (cliente != null)
+                        return View(cliente);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
         }
 
-        
+
         [HttpPost]
         public ActionResult AlterarDados(int id, FormCollection collection)
         {
@@ -75,12 +84,12 @@ namespace SistemaDelivery.Controllers
                     gerenciador.Editar(cliente);
                     return RedirectToAction("Index");
                 }
+                return View();
             }
-            catch
+            catch (Exception e)
             {
-                
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
-            return RedirectToAction("Index");
         }
 
         public ActionResult AlterarSenha()
