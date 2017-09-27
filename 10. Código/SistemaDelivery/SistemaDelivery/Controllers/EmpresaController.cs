@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
 using SistemaDelivery.Util;
+using System;
+using Model.Models.Exceptions;
 
 namespace SistemaDelivery.Controllers
 
@@ -80,7 +82,7 @@ namespace SistemaDelivery.Controllers
         {
             try
             {
-                Usuario empresa = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
+                Empresa empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
                 if (empresa != null)
                     return View(empresa);
                 return RedirectToAction("Index");
@@ -190,7 +192,7 @@ namespace SistemaDelivery.Controllers
 
             try
             {
-                List<Empresa> empresa = gerenciador.ObterEmpresas().Where(u => u.Id != ((Empresa)SessionHelper.Get(SessionKeys.Pessoa)).Id).ToList();
+                List<Empresa> empresa = gerenciador.ObterEmpresas();
                 if (empresa == null || empresa.Count == 0)
                     empresa = null;
                 return View(empresa);
@@ -215,11 +217,11 @@ namespace SistemaDelivery.Controllers
                 if (ModelState.IsValid)
                 {
                     Pessoa empresa = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
-                    String senha = Criptografia.GerarHashSenha(administrador.Login + collection["SenhaAtual"]);
+                    String senha = Criptografia.GerarHashSenha(empresa.Login + collection["SenhaAtual"]);
 
                     if (senha.ToLowerInvariant().Equals(empresa.Senha.ToLowerInvariant()))
                     {
-                        empresa.Senha = Criptografia.GerarHashSenha(administrador.Login + collection["NovaSenha"]);
+                        empresa.Senha = Criptografia.GerarHashSenha(empresa.Login + collection["NovaSenha"]);
                         SessionHelper.Set(SessionKeys.Pessoa, empresa);
                         gerenciador.Editar(empresa);
                         return RedirectToAction("Index");
