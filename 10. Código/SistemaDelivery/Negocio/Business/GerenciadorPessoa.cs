@@ -69,6 +69,21 @@ namespace Negocio.Business
             }
         }
 
+        public Pessoa ObterByLogin(string login)
+        {
+            try
+            {
+                Pessoa pessoa = persistencia.ObterUsuario(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()));
+                if (pessoa == null)
+                    pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()));
+                return pessoa;
+            }
+            catch (Exception e)
+            {
+                throw new NegocioException("Erro ao tentar obter as informações do objeto.", e);
+            }
+        }
+
         public Empresa ObterEmpresa(int? id)
         {
             try

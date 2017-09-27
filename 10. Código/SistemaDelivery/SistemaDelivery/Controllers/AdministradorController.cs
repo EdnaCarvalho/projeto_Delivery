@@ -9,25 +9,23 @@ using System;
 
 namespace SistemaDelivery.Controllers
 {
+    [Authenticated]
     [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
     public class AdministradorController : Controller
     {
 
         private GerenciadorPessoa gerenciador;
 
-
         public AdministradorController()
         {
             gerenciador = new GerenciadorPessoa();
         }
-
-        [Authenticated]
+       
         public ActionResult Index()
         {
             return View();
         }
-
-        [Authenticated]
+        
         public ActionResult Details(int? id)
         {
             try
@@ -45,23 +43,29 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
             }
         }
-
-        [Authenticated]
+        
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authenticated]
-        public ActionResult Create(Usuario administrador)
+        public ActionResult Create(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    gerenciador.Adicionar(administrador);
-                    return RedirectToAction("ListagemUsuarios");
+                    Pessoa pessoa = gerenciador.ObterByLogin(collection["Login"]);
+                    if (pessoa == null)
+                    {
+                        collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
+                        Usuario administrador = new Usuario();
+                        TryUpdateModel<Pessoa>(administrador, collection.ToValueProvider());
+                        gerenciador.Adicionar(administrador);
+                        return RedirectToAction("ListagemUsuarios");
+                    }
+                    ModelState.AddModelError("", "Login já existente.");
                 }
                 return View();
             }
@@ -70,8 +74,7 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro na criação do objeto.", e);
             }
         }
-
-        [Authenticated]
+        
         public ActionResult AlterarDados()
         {
             try
@@ -89,7 +92,6 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
-        [Authenticated]
         public ActionResult AlterarDados(Usuario administrador)
         {
             try
@@ -107,8 +109,7 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
         }
-
-        [Authenticated]
+        
         public ActionResult Edit(int? id)
         {
             try
@@ -128,7 +129,6 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        [Authenticated]
         public ActionResult Edit(int id, Usuario usuario)
         {
             try
@@ -145,8 +145,7 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
         }
-
-        [Authenticated]
+        
         public ActionResult Delete(int? id)
         {
             try
@@ -167,7 +166,6 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
-        [Authenticated]
         public ActionResult Delete(int id)
         {
             try
@@ -184,8 +182,7 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar remover objeto.", e);
             }
         }
-
-        [Authenticated]
+        
         public ActionResult ListagemUsuarios()
         {
             try
@@ -200,15 +197,13 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar obter os objetos.", e);
             }
         }
-
-        [Authenticated]
+        
         public ActionResult AlterarSenha()
         {
             return View();
         }
 
         [HttpPost]
-        [Authenticated]
         public ActionResult AlterarSenha(FormCollection collection)
         {
             try

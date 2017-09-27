@@ -47,12 +47,12 @@ namespace SistemaDelivery.Util
                 return true;
             else
                 if (httpContext.Request.IsAuthenticated && ((typeof(Usuario) == pessoa.GetType() && !((Usuario)pessoa).IsAdmin && NivelAcesso == TipoUsuario.CLIENTE) || AllowAccess))
-                    return true;
-                else
+                return true;
+            else
                     if (httpContext.Request.IsAuthenticated && ((typeof(Usuario) == pessoa.GetType() && ((Usuario)pessoa).IsAdmin && NivelAcesso == TipoUsuario.ADMINISTRADOR) || AllowAccess))
-                        return true;
-                    else
-                        return false;
+                return true;
+            else
+                return false;
         }
 
         /// <summary>
@@ -64,11 +64,38 @@ namespace SistemaDelivery.Util
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             Pessoa pessoa = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
-            if (pessoa == null)
-                HttpContext.Current.Session.Abandon();
             RouteValueDictionary rota = new RouteValueDictionary();
-            rota["controller"] = Controladora;
-            rota["action"] = MetodoAcao;
+
+            if (pessoa == null)
+            {
+                HttpContext.Current.Session.Abandon();
+                rota["controller"] = Controladora;
+                rota["action"] = MetodoAcao;
+            }
+            else
+            {
+                if ((typeof(Empresa) == pessoa.GetType()))
+                {
+                    rota["controller"] = "Empresa";
+                    rota["action"] = "Index";
+                }
+                else
+                {
+                    if ((typeof(Usuario) == pessoa.GetType() && ((Usuario)pessoa).IsAdmin ))
+                    {
+                        rota["controller"] = "Administrador";
+                        rota["action"] = "Index";
+                    }
+                    else
+                    {
+                        if ((typeof(Usuario) == pessoa.GetType() && !((Usuario)pessoa).IsAdmin))
+                        {
+                            rota["controller"] = "Cliente";
+                            rota["action"] = "Index";
+                        }
+                    }
+                }
+            }
             filterContext.Result = new RedirectToRouteResult(rota);
         }
     }

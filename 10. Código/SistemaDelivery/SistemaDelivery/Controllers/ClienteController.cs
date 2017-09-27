@@ -8,6 +8,7 @@ using System.Web.Security;
 
 namespace SistemaDelivery.Controllers
 {
+
     public class ClienteController : Controller
     {
         private GerenciadorPessoa gerenciador;
@@ -18,7 +19,7 @@ namespace SistemaDelivery.Controllers
         }
 
         [Authenticated]
-        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
         public ActionResult Index()
         {
             return View();
@@ -27,7 +28,7 @@ namespace SistemaDelivery.Controllers
         public ActionResult Cadastro()
         {
             return View();
-        }        
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -37,14 +38,19 @@ namespace SistemaDelivery.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
-                    Usuario cliente = new Usuario();
-                    TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
-                    gerenciador.Adicionar(cliente);
-                    FormsAuthentication.SetAuthCookie(cliente.Login, false);
-                    SessionHelper.Set(SessionKeys.Pessoa, cliente);
-                    return RedirectToAction("Index");
-                }
+                    Pessoa pessoa = gerenciador.ObterByLogin(collection["Login"]);
+                    if (pessoa == null)
+                    {
+                        collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
+                        Usuario cliente = new Usuario();
+                        TryUpdateModel<Pessoa>(cliente, collection.ToValueProvider());
+                        gerenciador.Adicionar(cliente);
+                        FormsAuthentication.SetAuthCookie(cliente.Login, false);
+                        SessionHelper.Set(SessionKeys.Pessoa, cliente);
+                        return RedirectToAction("Index");
+                    }
+                    ModelState.AddModelError("", "Login já existente.");
+                }                    
                 return View();
             }
             catch (Exception e)
@@ -55,7 +61,7 @@ namespace SistemaDelivery.Controllers
 
 
         [Authenticated]
-        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
         public ActionResult AlterarDados()
         {
             try
@@ -75,16 +81,13 @@ namespace SistemaDelivery.Controllers
 
         [HttpPost]
         [Authenticated]
-        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora ="Cliente")]
-        public ActionResult AlterarDados(FormCollection collection)
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
+        public ActionResult AlterarDados(Usuario cliente)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
-                    Usuario cliente = new Usuario();
-                    TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
                     SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     gerenciador.Editar(cliente);
                     return RedirectToAction("Index");
@@ -98,7 +101,7 @@ namespace SistemaDelivery.Controllers
         }
 
         [Authenticated]
-        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
         public ActionResult AlterarSenha()
         {
             return View();
@@ -106,7 +109,7 @@ namespace SistemaDelivery.Controllers
 
         [HttpPost]
         [Authenticated]
-        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
         public ActionResult AlterarSenha(FormCollection collection)
         {
             try
@@ -115,7 +118,6 @@ namespace SistemaDelivery.Controllers
                 {
                     Pessoa cliente = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
                     String senha = Criptografia.GerarHashSenha(cliente.Login + collection["SenhaAtual"]);
-
                     if (senha.ToLowerInvariant().Equals(cliente.Senha.ToLowerInvariant()))
                     {
                         cliente.Senha = Criptografia.GerarHashSenha(cliente.Login + collection["NovaSenha"]);
