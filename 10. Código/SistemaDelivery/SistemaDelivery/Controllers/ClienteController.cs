@@ -4,6 +4,7 @@ using Negocio.Business;
 using SistemaDelivery.Util;
 using Model.Models.Exceptions;
 using System;
+using System.Web.Security;
 
 namespace SistemaDelivery.Controllers
 {
@@ -15,7 +16,6 @@ namespace SistemaDelivery.Controllers
         {
             gerenciador = new GerenciadorPessoa();
         }
-
 
         [Authenticated]
         [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
@@ -41,6 +41,7 @@ namespace SistemaDelivery.Controllers
                     Usuario cliente = new Usuario();
                     TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
                     gerenciador.Adicionar(cliente);
+                    FormsAuthentication.SetAuthCookie(cliente.Login, false);
                     SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     return RedirectToAction("Index");
                 }
@@ -122,7 +123,10 @@ namespace SistemaDelivery.Controllers
                         gerenciador.Editar(cliente);
                         return RedirectToAction("Index");
                     }
-                    ModelState.AddModelError("", "Senha incorreta.");
+                    else
+                    {
+                        ModelState.AddModelError("", "Senha incorreta.");
+                    }
                 }
                 return View();
             }

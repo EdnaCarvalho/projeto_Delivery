@@ -9,6 +9,7 @@ using System;
 
 namespace SistemaDelivery.Controllers
 {
+    [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
     public class AdministradorController : Controller
     {
 
@@ -20,12 +21,13 @@ namespace SistemaDelivery.Controllers
             gerenciador = new GerenciadorPessoa();
         }
 
+        [Authenticated]
         public ActionResult Index()
         {
             return View();
         }
 
-
+        [Authenticated]
         public ActionResult Details(int? id)
         {
             try
@@ -44,12 +46,14 @@ namespace SistemaDelivery.Controllers
             }
         }
 
+        [Authenticated]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authenticated]
         public ActionResult Create(Usuario administrador)
         {
             try
@@ -67,16 +71,14 @@ namespace SistemaDelivery.Controllers
             }
         }
 
-        public ActionResult AlterarDados(int? id)
+        [Authenticated]
+        public ActionResult AlterarDados()
         {
             try
             {
-                if (id.HasValue)
-                {
-                    Usuario administrador = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
-                    if (administrador != null)
-                        return View(administrador);
-                }
+                Usuario administrador = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
+                if (administrador != null)
+                    return View(administrador);
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -87,7 +89,8 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
-        public ActionResult AlterarDados(int id, Usuario administrador)
+        [Authenticated]
+        public ActionResult AlterarDados(Usuario administrador)
         {
             try
             {
@@ -105,6 +108,7 @@ namespace SistemaDelivery.Controllers
             }
         }
 
+        [Authenticated]
         public ActionResult Edit(int? id)
         {
             try
@@ -124,6 +128,7 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
+        [Authenticated]
         public ActionResult Edit(int id, Usuario usuario)
         {
             try
@@ -141,6 +146,7 @@ namespace SistemaDelivery.Controllers
             }
         }
 
+        [Authenticated]
         public ActionResult Delete(int? id)
         {
             try
@@ -161,6 +167,7 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
+        [Authenticated]
         public ActionResult Delete(int id)
         {
             try
@@ -178,6 +185,7 @@ namespace SistemaDelivery.Controllers
             }
         }
 
+        [Authenticated]
         public ActionResult ListagemUsuarios()
         {
             try
@@ -192,12 +200,15 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar obter os objetos.", e);
             }
         }
+
+        [Authenticated]
         public ActionResult AlterarSenha()
         {
             return View();
         }
 
         [HttpPost]
+        [Authenticated]
         public ActionResult AlterarSenha(FormCollection collection)
         {
             try

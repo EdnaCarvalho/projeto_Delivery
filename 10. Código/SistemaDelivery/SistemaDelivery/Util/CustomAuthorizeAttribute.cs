@@ -26,7 +26,7 @@ namespace SistemaDelivery.Util
         public CustomAuthorizeAttribute()
         {
             AllowAccess = false;
-            MetodoAcao = "Index";
+            MetodoAcao = "Login";
             Controladora = "Home";
         }
 
