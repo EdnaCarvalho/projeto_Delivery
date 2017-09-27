@@ -9,7 +9,6 @@ namespace SistemaDelivery.Controllers
 {
     public class ClienteController : Controller
     {
-
         private GerenciadorPessoa gerenciador;
 
         public ClienteController()
@@ -17,19 +16,22 @@ namespace SistemaDelivery.Controllers
             gerenciador = new GerenciadorPessoa();
         }
 
+
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Create()
+        public ActionResult Cadastro()
         {
             return View();
-        }
+        }        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Cadastro(FormCollection collection)
         {
             try
             {
@@ -38,7 +40,6 @@ namespace SistemaDelivery.Controllers
                     collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
                     Usuario cliente = new Usuario();
                     TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
-                    cliente.IsAdmin = false;
                     gerenciador.Adicionar(cliente);
                     SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     return RedirectToAction("Index");
@@ -51,16 +52,17 @@ namespace SistemaDelivery.Controllers
             }
         }
 
-        public ActionResult AlterarDados(int? id)
+
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
+        public ActionResult AlterarDados()
         {
             try
             {
-                if (id.HasValue)
-                {
-                    Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
-                    if (cliente != null)
-                        return View(cliente);
-                }
+                Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
+                if (cliente != null)
+                    return View(cliente);
+
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -71,7 +73,9 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
-        public ActionResult AlterarDados(int id, FormCollection collection)
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora ="Cliente")]
+        public ActionResult AlterarDados(FormCollection collection)
         {
             try
             {
@@ -92,9 +96,40 @@ namespace SistemaDelivery.Controllers
             }
         }
 
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
         public ActionResult AlterarSenha()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE, MetodoAcao = "Index", Controladora = "Cliente")]
+        public ActionResult AlterarSenha(FormCollection collection)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Pessoa cliente = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
+                    String senha = Criptografia.GerarHashSenha(cliente.Login + collection["SenhaAtual"]);
+
+                    if (senha.ToLowerInvariant().Equals(cliente.Senha.ToLowerInvariant()))
+                    {
+                        cliente.Senha = Criptografia.GerarHashSenha(cliente.Login + collection["NovaSenha"]);
+                        SessionHelper.Set(SessionKeys.Pessoa, cliente);
+                        gerenciador.Editar(cliente);
+                        return RedirectToAction("Index");
+                    }
+                    ModelState.AddModelError("", "Senha incorreta.");
+                }
+                return View();
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
+            }
         }
 
     }

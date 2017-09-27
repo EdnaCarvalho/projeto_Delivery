@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Model.App_GlobalResources;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model.Models
@@ -53,7 +49,7 @@ namespace Model.Models
             set { email = value; }
         }
 
-        [Required (ErrorMessage = "O telefone é obrigatória.")]
+        [Required(ErrorMessage = "O telefone é obrigatória.")]
         [StringLength(12)]
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]

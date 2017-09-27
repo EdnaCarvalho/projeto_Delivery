@@ -192,10 +192,36 @@ namespace SistemaDelivery.Controllers
                 throw new ControllerException("Erro ao tentar obter os objetos.", e);
             }
         }
-
         public ActionResult AlterarSenha()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult AlterarSenha(FormCollection collection)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Pessoa administrador = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
+                    String senha = Criptografia.GerarHashSenha(administrador.Login + collection["SenhaAtual"]);
+
+                    if (senha.ToLowerInvariant().Equals(administrador.Senha.ToLowerInvariant()))
+                    {
+                        administrador.Senha = Criptografia.GerarHashSenha(administrador.Login + collection["NovaSenha"]);
+                        SessionHelper.Set(SessionKeys.Pessoa, administrador);
+                        gerenciador.Editar(administrador);
+                        return RedirectToAction("Index");
+                    }
+                    ModelState.AddModelError("", "Senha incorreta.");
+                }
+                return View();
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
+            }
         }
 
     }

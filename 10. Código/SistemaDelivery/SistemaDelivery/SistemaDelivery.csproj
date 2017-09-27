@@ -203,11 +203,8 @@
     <Content Include="Views\Administrador\Delete.cshtml" />
     <Content Include="Views\Administrador\Create.cshtml" />
     <Content Include="Views\Cliente\Index.cshtml" />
-    <Content Include="Views\Cliente\Create.cshtml" />
-    <Content Include="Views\Cliente\AlterarSenha.cshtml" />
     <Content Include="Views\Administrador\ListagemUsuarios.cshtml" />
     <Content Include="Views\Empresa\ListagemDistribuidoras.cshtml" />
-    <Content Include="Views\Administrador\AlterarSenha.cshtml" />
     <Content Include="Views\Empresa\AlterarSenha.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\AlterarSenha.cshtml" />
@@ -217,6 +214,9 @@
     <Content Include="Views\Empresa\AlterarDados.cshtml" />
     <Content Include="Views\Empresa\Edit.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Cliente\AlterarSenha.cshtml" />
+    <Content Include="Views\Administrador\AlterarSenha.cshtml" />
+    <Content Include="Views\Cliente\Cadastro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
