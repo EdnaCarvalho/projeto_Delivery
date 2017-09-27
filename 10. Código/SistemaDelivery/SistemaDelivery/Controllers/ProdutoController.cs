@@ -3,25 +3,24 @@ using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
 using SistemaDelivery.Util;
+using Model.Models.Exceptions;
+using System;
 
 namespace SistemaDelivery.Controllers
 {
     public class ProdutoController : Controller
     {
         private GerenciadorProduto gerenciador;
-        private Empresa empresa;
+        public Empresa empresa;
 
         public ProdutoController()
         {
-            if (SessionHelper.Get(SessionKeys.Pessoa) != null)
-                empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
-            else
-                empresa = (Empresa)SessionHelper.Set(SessionKeys.Pessoa, new Empresa() { Id = 1 }); //TODO: Remover quando implementar autenticação.
-            gerenciador = new GerenciadorProduto();
+            
         }
 
         public ActionResult Index()
         {
+            empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
             List<Produto> produtos = gerenciador.ObterTodos(empresa.Id);
             if (produtos == null || produtos.Count == 0)
                 produtos = null;
@@ -30,20 +29,36 @@ namespace SistemaDelivery.Controllers
 
         public ActionResult Details(int? id)
         {
-            if (id.HasValue)
+            try
             {
-                Produto produto = gerenciador.Obter(id);
-                if (produto != null)
-                    return View(produto);
+                if (id.HasValue)
+                {
+                    Produto produto = gerenciador.Obter(id);
+                    if (produto != null)
+                        return View(produto);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
+            
         }
 
         public ActionResult Create()
         {
-            ViewBag.ListaDescricao = new SelectList(gerenciador.ObterTodosTipos(), "Id", "Descricao");
-            ViewBag.ListaMarca = new SelectList(gerenciador.ObterTodosTipos(), "Id", "Marca");
-            return View();
+            try
+            {
+                ViewBag.ListaDescricao = new SelectList(gerenciador.ObterTodosTipos(), "Id", "Descricao");
+                ViewBag.ListaMarca = new SelectList(gerenciador.ObterTodosTipos(), "Id", "Marca");
+                return View();
+            }
+            catch(Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
+            
         }
 
         [HttpPost]
@@ -61,22 +76,30 @@ namespace SistemaDelivery.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                throw new ControllerException("Erro ao tentar criar o objeto.", e);
             }
             return View();
         }
 
         public ActionResult Edit(int? id)
         {
-            if (id.HasValue)
+            try
             {
-                Produto produto = gerenciador.Obter(id);
-                if (produto != null)
-                    return View(produto);
+                if (id.HasValue)
+                {
+                    Produto produto = gerenciador.Obter(id);
+                    if (produto != null)
+                        return View(produto);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch(Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
+            
         }
 
         [HttpPost]
@@ -91,22 +114,30 @@ namespace SistemaDelivery.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
-
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
             return RedirectToAction("Index");
         }
 
         public ActionResult Delete(int? id)
         {
-            if (id.HasValue)
+            try
             {
-                Produto produto = gerenciador.Obter(id);
-                if (produto != null)
-                    return View(produto);
+                if (id.HasValue)
+                {
+                    Produto produto = gerenciador.Obter(id);
+                    if (produto != null)
+                        return View(produto);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch(Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
+            
         }
 
         [HttpPost]
@@ -121,9 +152,9 @@ namespace SistemaDelivery.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
-
+                throw new ControllerException("Erro ao tentar remover o objeto.", e);
             }
             return View();
         }
