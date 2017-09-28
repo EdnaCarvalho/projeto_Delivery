@@ -3,9 +3,14 @@ using System.Web.Mvc;
 using Model.Models;
 using Negocio.Business;
 using SistemaDelivery.Util;
+using System;
+using Model.Models.Exceptions;
 
 namespace SistemaDelivery.Controllers
+
 {
+    [Authenticated]
+    [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
     public class EmpresaController : Controller
     {
         private GerenciadorPessoa gerenciador;
@@ -22,13 +27,21 @@ namespace SistemaDelivery.Controllers
 
         public ActionResult Details(int? id)
         {
-            if (id.HasValue)
+            try
             {
-                Empresa empresa = gerenciador.ObterEmpresa(id);
-                if(empresa != null)
-                    return View(empresa);
+                if (id.HasValue)
+                {
+                    Empresa empresa = gerenciador.ObterEmpresa(id);
+                    if (empresa != null)
+                        return View(empresa);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+
+            }
         }
 
         public ActionResult Create()
@@ -37,36 +50,52 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Empresa empresa)
+        public ActionResult Create(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    gerenciador.Adicionar(empresa);
-                    return RedirectToAction("ListagemDistribuidoras");
+
+                    Pessoa pessoa = gerenciador.ObterByLogin(collection["Login"]);
+                    if (pessoa == null)
+                    {
+                        collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
+                        Usuario empresa = new Usuario();
+                        TryUpdateModel<Pessoa>(empresa, collection.ToValueProvider());
+                        gerenciador.Adicionar(empresa);
+                        return RedirectToAction("ListagemDistribuidoras");
+                    }
+                    ModelState.AddModelError("", "Login já existente.");
+                   
                 }
+                return View();
             }
-            catch
+            catch (Exception e)
             {
-                
+                throw new ControllerException("Erro na criação do objeto.", e);
             }
-            return View();
+          
         }
 
-        public ActionResult AlterarDados(int? id)
+        public ActionResult AlterarDados()
         {
-            if (id.HasValue)
+            try
             {
                 Empresa empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
                 if (empresa != null)
                     return View(empresa);
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
+            
         }
 
         [HttpPost]
-        public ActionResult AlterarDados(int id, Empresa empresa)
+       public ActionResult AlterarDados(Usuario empresa)
         {
             try
             {
@@ -76,22 +105,30 @@ namespace SistemaDelivery.Controllers
                     gerenciador.Editar(empresa);
                     return RedirectToAction("Index");
                 }
+                return View();
             }
-            catch
+            catch (Exception e)
             {
-               
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
-            return View();
+          
         }
         public ActionResult Edit(int? id)
         {
-            if (id.HasValue)
+            try
             {
-                Empresa empresa = gerenciador.ObterEmpresa(id);
-                if (empresa != null)
-                    return View(empresa);
+                if (id.HasValue)
+                {
+                    Empresa empresa = gerenciador.ObterEmpresa(id);
+                    if (empresa != null)
+                        return View(empresa);
+                }
+                return RedirectToAction("ListagemDistribuidoras");
             }
-            return RedirectToAction("ListagemDistribuidoras");
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
         }
 
         [HttpPost]
@@ -104,24 +141,32 @@ namespace SistemaDelivery.Controllers
                     gerenciador.Editar(empresa);
                     return RedirectToAction("ListagemDistribuidoras");
                 }
+                return View();
             }
-            catch
+            catch (Exception e)
             {
-
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
-            return View();
+            
         }
 
         public ActionResult Delete(int? id)
         {
-
-            if (id.HasValue)
+            try
             {
-                Empresa empresa = gerenciador.ObterEmpresa(id);
-                if (empresa != null)
-                    return View(empresa);
+                if (id.HasValue)
+                {
+                    Empresa empresa = gerenciador.ObterEmpresa(id);
+                    if (empresa != null)
+                        return View(empresa);
+                }
+                return RedirectToAction("ListagemDistribuidoras");
             }
-            return RedirectToAction("ListagemDistribuidoras");
+            catch(Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
+            }
+           
         }
 
         [HttpPost]
@@ -134,25 +179,61 @@ namespace SistemaDelivery.Controllers
                     gerenciador.Remover(new Empresa { Id = id });
                     return RedirectToAction("ListagemDistribuidoras");
                 }
+                return View();
             }
-            catch
+            catch ( Exception e)
             {
-                
+                throw new ControllerException("Erro ao tentar remover objeto.", e);
             }
-            return View();
+            
         }
         public ActionResult ListagemDistribuidoras()
         {
-            
-            List<Empresa> empresa = gerenciador.ObterEmpresas();
-            if (empresa == null || empresa.Count == 0)
-                empresa = null;
-            return View(empresa);
+
+            try
+            {
+                List<Empresa> empresa = gerenciador.ObterEmpresas();
+                if (empresa == null || empresa.Count == 0)
+                    empresa = null;
+                return View(empresa);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter os objetos.", e);
+            }
+         
         }
 
         public ActionResult AlterarSenha()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult AlterarSenha(FormCollection collection)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Pessoa empresa = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
+                    String senha = Criptografia.GerarHashSenha(empresa.Login + collection["SenhaAtual"]);
+
+                    if (senha.ToLowerInvariant().Equals(empresa.Senha.ToLowerInvariant()))
+                    {
+                        empresa.Senha = Criptografia.GerarHashSenha(empresa.Login + collection["NovaSenha"]);
+                        SessionHelper.Set(SessionKeys.Pessoa, empresa);
+                        gerenciador.Editar(empresa);
+                        return RedirectToAction("Index");
+                    }
+                    ModelState.AddModelError("", "Senha incorreta.");
+                }
+                return View();
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
+            }
         }
 
     }
