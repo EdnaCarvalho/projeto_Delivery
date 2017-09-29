@@ -22,12 +22,34 @@ namespace SistemaDelivery.Controllers
         [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         public ActionResult Cadastro()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         [HttpPost]
@@ -44,14 +66,19 @@ namespace SistemaDelivery.Controllers
                         collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
                         Usuario cliente = new Usuario();
                         TryUpdateModel<Pessoa>(cliente, collection.ToValueProvider());
+                        cliente.ConfirmarSenha = cliente.Senha;
                         gerenciador.Adicionar(cliente);
                         FormsAuthentication.SetAuthCookie(cliente.Login, false);
                         SessionHelper.Set(SessionKeys.Pessoa, cliente);
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("", "Login já existente.");
-                }                    
+                }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar criar o objeto.", n);
             }
             catch (Exception e)
             {
@@ -72,6 +99,10 @@ namespace SistemaDelivery.Controllers
 
                 return RedirectToAction("Index");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
@@ -82,17 +113,23 @@ namespace SistemaDelivery.Controllers
         [HttpPost]
         [Authenticated]
         [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
-        public ActionResult AlterarDados(Usuario cliente)
+        public ActionResult AlterarDados(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    Usuario cliente = new Usuario();
+                    TryUpdateModel<Usuario>(cliente, collection.ToValueProvider());
                     SessionHelper.Set(SessionKeys.Pessoa, cliente);
                     gerenciador.Editar(cliente);
                     return RedirectToAction("Index");
                 }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
             }
             catch (Exception e)
             {
@@ -104,7 +141,18 @@ namespace SistemaDelivery.Controllers
         [CustomAuthorize(NivelAcesso = Util.TipoUsuario.CLIENTE)]
         public ActionResult AlterarSenha()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         [HttpPost]
@@ -121,6 +169,7 @@ namespace SistemaDelivery.Controllers
                     if (senha.ToLowerInvariant().Equals(cliente.Senha.ToLowerInvariant()))
                     {
                         cliente.Senha = Criptografia.GerarHashSenha(cliente.Login + collection["NovaSenha"]);
+                        cliente.ConfirmarSenha = cliente.Senha;
                         SessionHelper.Set(SessionKeys.Pessoa, cliente);
                         gerenciador.Editar(cliente);
                         return RedirectToAction("Index");
@@ -131,6 +180,10 @@ namespace SistemaDelivery.Controllers
                     }
                 }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
             }
             catch (Exception e)
             {

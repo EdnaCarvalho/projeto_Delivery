@@ -27,7 +27,7 @@ namespace Model.Models
         }
 
         [Required(ErrorMessage = "O CPF é obrigatório")]
-        [StringLength(11, ErrorMessage = "Deve conter apenas os dígitos.")]
+        [StringLength(11, ErrorMessage = "Total de dígitos incorreta.")]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]
         public string Cpf
         {
@@ -37,7 +37,7 @@ namespace Model.Models
 
 
         [Required(ErrorMessage = "O CNPJ é obrigatório")]
-        [StringLength(50, MinimumLength = 5)]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Total de dígitos incorreta.")]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]
         public string Cnpj
         {

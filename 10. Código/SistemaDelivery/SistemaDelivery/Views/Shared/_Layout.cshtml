@@ -23,6 +23,7 @@
                 }
                 else
                 {
+                    String controlle = "";
                     Model.Models.Pessoa pessoa = SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) as Model.Models.Pessoa;
                     if (typeof(Model.Models.Empresa) == pessoa.GetType())
                     {
@@ -36,17 +37,7 @@
                                     <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Produto")</p>
                                 </div>
                             </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    MEU PERFIL
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Empresa")</p>
-                                    <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", "Empresa")</p>
-                                </div>
-                            </li>
-
+                        controlle = "Empresa";
                     }
                     else
                     {
@@ -72,35 +63,27 @@
                                     <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Administrador")</p>
                                 </div>
                             </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    MEU PERFIL 
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Administrador")</p>
-                                    <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", "Administrador")</p>
-                                </div>
-                            </li>
+                            controlle = "Administrador";
                         }
                         else
                         {
                             if ((typeof(Model.Models.Usuario) == pessoa.GetType() && !((Model.Models.Usuario)pessoa).IsAdmin))
                             {
-                                //Cliente
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        MEU PERFIL
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Cliente")</p>
-                                        <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", "Cliente")</p>
-                                    </div>
-                                </li>
+                                <li>@Html.ActionLink(" DISTRIBUIDORAS ", "ListagemDistribuidoras", "Empresa")</li>
+                                controlle = "Cliente";
                             }
                         }
+
                     }
-                    <!--TODOS-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            MEU PERFIL
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", controlle)</p>
+                            <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", controlle)</p>
+                        </div>
+                    </li>
                     <li>@Html.ActionLink(" SAIR ", "Logout", "Home")</li>
                 }
             </ul>

@@ -7,24 +7,37 @@ using System;
 using Model.Models.Exceptions;
 
 namespace SistemaDelivery.Controllers
-
 {
-    [Authenticated]
-    [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
+
     public class EmpresaController : Controller
     {
         private GerenciadorPessoa gerenciador;
 
-        public EmpresaController ()
+        public EmpresaController()
         {
             gerenciador = new GerenciadorPessoa();
         }
 
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
+        [Authenticated]
+        [CustomAuthorize (NivelAcesso = Util.TipoUsuario.USUARIO)]
         public ActionResult Details(int? id)
         {
             try
@@ -37,47 +50,69 @@ namespace SistemaDelivery.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
-
             }
         }
 
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         [HttpPost]
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
         public ActionResult Create(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-
                     Pessoa pessoa = gerenciador.ObterByLogin(collection["Login"]);
                     if (pessoa == null)
                     {
                         collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
-                        Usuario empresa = new Usuario();
-                        TryUpdateModel<Pessoa>(empresa, collection.ToValueProvider());
+                        Empresa empresa = new Empresa();
+                        TryUpdateModel<Empresa>(empresa, collection.ToValueProvider());
+                        empresa.ConfirmarSenha = empresa.Senha;
                         gerenciador.Adicionar(empresa);
                         return RedirectToAction("ListagemDistribuidoras");
                     }
                     ModelState.AddModelError("", "Login já existente.");
-                   
                 }
-                return View();
+                return View(collection);
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar criar o objeto.", n);
             }
             catch (Exception e)
             {
-                throw new ControllerException("Erro na criação do objeto.", e);
+                throw new ControllerException("Erro ao tentar criar o objeto.", e);
             }
-          
         }
 
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
         public ActionResult AlterarDados()
         {
             try
@@ -87,32 +122,45 @@ namespace SistemaDelivery.Controllers
                     return View(empresa);
                 return RedirectToAction("Index");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
             }
-            
         }
 
         [HttpPost]
-       public ActionResult AlterarDados(Usuario empresa)
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
+        public ActionResult AlterarDados(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    SessionHelper.Set(SessionKeys.Pessoa,empresa);
+                    Empresa empresa = new Empresa();
+                    TryUpdateModel<Empresa>(empresa, collection.ToValueProvider());
+                    SessionHelper.Set(SessionKeys.Pessoa, empresa);
                     gerenciador.Editar(empresa);
                     return RedirectToAction("Index");
                 }
                 return View();
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
-          
         }
+
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
         public ActionResult Edit(int? id)
         {
             try
@@ -125,6 +173,10 @@ namespace SistemaDelivery.Controllers
                 }
                 return RedirectToAction("ListagemDistribuidoras");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
@@ -132,24 +184,33 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, Empresa empresa)
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
+        public ActionResult Edit(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    Empresa empresa = new Empresa();
+                    TryUpdateModel<Empresa>(empresa, collection.ToValueProvider());
                     gerenciador.Editar(empresa);
                     return RedirectToAction("ListagemDistribuidoras");
                 }
                 return View();
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar alterar as informações do objeto.", e);
             }
-            
         }
 
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
         public ActionResult Delete(int? id)
         {
             try
@@ -162,14 +223,20 @@ namespace SistemaDelivery.Controllers
                 }
                 return RedirectToAction("ListagemDistribuidoras");
             }
-            catch(Exception e)
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
+            catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
             }
-           
+
         }
 
         [HttpPost]
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.ADMINISTRADOR)]
         public ActionResult Delete(int id)
         {
             try
@@ -181,54 +248,82 @@ namespace SistemaDelivery.Controllers
                 }
                 return View();
             }
-            catch ( Exception e)
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar remover o objeto.", n);
+            }
+            catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar remover objeto.", e);
             }
-            
         }
+
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.USUARIO)]
         public ActionResult ListagemDistribuidoras()
         {
-
             try
             {
-                List<Empresa> empresa = gerenciador.ObterEmpresas();
-                if (empresa == null || empresa.Count == 0)
-                    empresa = null;
-                return View(empresa);
+                List<Empresa> empresas = gerenciador.ObterEmpresas();
+                if (empresas == null || empresas.Count == 0)
+                    empresas = null;
+                return View(empresas);
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter os objetos.", n);
             }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter os objetos.", e);
             }
-         
         }
 
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
         public ActionResult AlterarSenha()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         [HttpPost]
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.EMPRESA)]
         public ActionResult AlterarSenha(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Pessoa empresa = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
+                    Empresa empresa = (Empresa)SessionHelper.Get(SessionKeys.Pessoa);
                     String senha = Criptografia.GerarHashSenha(empresa.Login + collection["SenhaAtual"]);
 
                     if (senha.ToLowerInvariant().Equals(empresa.Senha.ToLowerInvariant()))
                     {
                         empresa.Senha = Criptografia.GerarHashSenha(empresa.Login + collection["NovaSenha"]);
                         SessionHelper.Set(SessionKeys.Pessoa, empresa);
+                        empresa.ConfirmarSenha = empresa.Senha;
                         gerenciador.Editar(empresa);
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("", "Senha incorreta.");
                 }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
             }
             catch (Exception e)
             {

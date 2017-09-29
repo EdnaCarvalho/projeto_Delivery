@@ -23,7 +23,18 @@ namespace SistemaDelivery.Controllers
        
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
         
         public ActionResult Details(int? id)
@@ -38,6 +49,10 @@ namespace SistemaDelivery.Controllers
                 }
                 return RedirectToAction("ListagemUsuarios");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
@@ -46,7 +61,18 @@ namespace SistemaDelivery.Controllers
         
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         [HttpPost]
@@ -60,18 +86,23 @@ namespace SistemaDelivery.Controllers
                     if (pessoa == null)
                     {
                         collection["Senha"] = Criptografia.GerarHashSenha(collection["Login"] + collection["Senha"]);
-                        Usuario administrador = new Usuario();
-                        TryUpdateModel<Pessoa>(administrador, collection.ToValueProvider());
-                        gerenciador.Adicionar(administrador);
+                        Usuario usuario = new Usuario();
+                        TryUpdateModel<Usuario>(usuario, collection.ToValueProvider());
+                        usuario.ConfirmarSenha = usuario.Senha;
+                        gerenciador.Adicionar(usuario);
                         return RedirectToAction("ListagemUsuarios");
                     }
                     ModelState.AddModelError("", "Login já existente.");
                 }
                 return View();
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar criar o objeto.", n);
+            }
             catch (Exception e)
             {
-                throw new ControllerException("Erro na criação do objeto.", e);
+                throw new ControllerException("Erro ao tentar criar o objeto.", e);
             }
         }
         
@@ -84,6 +115,10 @@ namespace SistemaDelivery.Controllers
                     return View(administrador);
                 return RedirectToAction("Index");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
@@ -92,17 +127,23 @@ namespace SistemaDelivery.Controllers
 
 
         [HttpPost]
-        public ActionResult AlterarDados(Usuario administrador)
+        public ActionResult AlterarDados(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    Usuario administrador = new Usuario();
+                    TryUpdateModel<Usuario>(administrador, collection.ToValueProvider());
                     SessionHelper.Set(SessionKeys.Pessoa, administrador);
                     gerenciador.Editar(administrador);
                     return RedirectToAction("Index");
                 }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
             }
             catch (Exception e)
             {
@@ -122,6 +163,10 @@ namespace SistemaDelivery.Controllers
                 }
                 return RedirectToAction("ListagemUsuarios");
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter as informações do objeto.", e);
@@ -129,16 +174,22 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, Usuario usuario)
+        public ActionResult Edit(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    Usuario usuario = new Usuario();
+                    TryUpdateModel<Usuario>(usuario, collection.ToValueProvider());
                     gerenciador.Editar(usuario);
                     return RedirectToAction("ListagemUsuarios");
                 }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
             }
             catch (Exception e)
             {
@@ -157,6 +208,10 @@ namespace SistemaDelivery.Controllers
                         return View(usuario);
                 }
                 return RedirectToAction("ListagemUsuarios");
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações do objeto.", n);
             }
             catch (Exception e)
             {
@@ -177,9 +232,13 @@ namespace SistemaDelivery.Controllers
                 }
                 return View();
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar remover o objeto.", n);
+            }
             catch (Exception e)
             {
-                throw new ControllerException("Erro ao tentar remover objeto.", e);
+                throw new ControllerException("Erro ao tentar remover o objeto.", e);
             }
         }
         
@@ -192,6 +251,10 @@ namespace SistemaDelivery.Controllers
                     usuarios = null;
                 return View(usuarios);
             }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter os objetos.", n);
+            }
             catch (Exception e)
             {
                 throw new ControllerException("Erro ao tentar obter os objetos.", e);
@@ -200,7 +263,18 @@ namespace SistemaDelivery.Controllers
         
         public ActionResult AlterarSenha()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar acessar ação", e);
+            }
         }
 
         [HttpPost]
@@ -210,12 +284,13 @@ namespace SistemaDelivery.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Pessoa administrador = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
+                    Usuario administrador = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
                     String senha = Criptografia.GerarHashSenha(administrador.Login + collection["SenhaAtual"]);
 
                     if (senha.ToLowerInvariant().Equals(administrador.Senha.ToLowerInvariant()))
                     {
                         administrador.Senha = Criptografia.GerarHashSenha(administrador.Login + collection["NovaSenha"]);
+                        administrador.ConfirmarSenha = administrador.Senha;
                         SessionHelper.Set(SessionKeys.Pessoa, administrador);
                         gerenciador.Editar(administrador);
                         return RedirectToAction("Index");
@@ -223,6 +298,10 @@ namespace SistemaDelivery.Controllers
                     ModelState.AddModelError("", "Senha incorreta.");
                 }
                 return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar alterar as informações do objeto.", n);
             }
             catch (Exception e)
             {

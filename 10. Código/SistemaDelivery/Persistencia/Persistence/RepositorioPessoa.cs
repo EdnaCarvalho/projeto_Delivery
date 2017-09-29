@@ -56,7 +56,7 @@ namespace Persistencia.Persistence
             }
             catch (Exception e)
             {
-                throw new PersistenciaException("Erro na edição do objeto.", e);
+                throw new PersistenciaException("Erro ao tentar editar o objeto.", e);
             }
         }
 

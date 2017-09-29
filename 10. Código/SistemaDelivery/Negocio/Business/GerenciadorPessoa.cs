@@ -2,7 +2,6 @@
 using Model.Models;
 using Persistencia.Persistence;
 using Model.Models.Exceptions;
-using System;
 
 namespace Negocio.Business
 {
@@ -22,9 +21,9 @@ namespace Negocio.Business
                 persistencia.Adicionar(pessoa);
                 return pessoa;
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
-                throw new NegocioException("Erro ao tentar adicionar objeto.", e);
+                throw new NegocioException("Erro ao tentar adicionar o objeto.", e);
             }
         }
 
@@ -34,9 +33,9 @@ namespace Negocio.Business
             {
                 persistencia.Editar(pessoa);
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
-                throw new NegocioException("Erro ao tentar editar objeto.", e);
+                throw new NegocioException("Erro ao tentar editar o objeto.", e);
             }
         }
 
@@ -46,24 +45,35 @@ namespace Negocio.Business
             {
                 persistencia.Remover(pessoa);
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
-                throw new NegocioException("Erro ao tentar remover objeto.", e);
+                throw new NegocioException("Erro ao tentar remover o objeto.", e);
             }
         }
 
-        public Pessoa ObterByLoginSenha(string login, string senha)
+        public Usuario ObterByLoginSenhaUsuario(string login, string senha)
         {
             try
             {
-                Pessoa pessoa = persistencia.ObterUsuario(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
+                Usuario pessoa = persistencia.ObterUsuario(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
                     e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
-                if (pessoa == null)
-                    pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
-                        e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
                 return pessoa;
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
+            {
+                throw new NegocioException("Erro ao tentar obter as informações do objeto.", e);
+            }
+        }
+
+        public Empresa ObterByLoginSenhaEmpresa(string login, string senha)
+        {
+            try
+            {
+                Empresa pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()) &&
+                    e.Senha.ToLowerInvariant().Equals(senha.ToLowerInvariant()));
+                return pessoa;
+            }
+            catch (PersistenciaException e)
             {
                 throw new NegocioException("Erro ao tentar obter as informações do objeto.", e);
             }
@@ -78,7 +88,7 @@ namespace Negocio.Business
                     pessoa = persistencia.ObterEmpresa(e => e.Login.ToLowerInvariant().Equals(login.ToLowerInvariant()));
                 return pessoa;
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
                 throw new NegocioException("Erro ao tentar obter as informações do objeto.", e);
             }
@@ -90,7 +100,7 @@ namespace Negocio.Business
             {
                 return persistencia.ObterEmpresa(e => e.Id == id);
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
                 throw new NegocioException("Erro ao tentar obter objeto.", e);
             }
@@ -102,7 +112,7 @@ namespace Negocio.Business
             {
                 return persistencia.ObterUsuario(e => e.Id == id);
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
                 throw new NegocioException("Erro ao tentar obter objeto.", e);
             }
@@ -114,7 +124,7 @@ namespace Negocio.Business
             {
                 return persistencia.ObterEmpresas();
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
                 throw new NegocioException("Erro ao tentar obter os objetos.", e);
             }
@@ -126,7 +136,7 @@ namespace Negocio.Business
             {
                 return persistencia.ObterUsuarios();
             }
-            catch (Exception e)
+            catch (PersistenciaException e)
             {
                 throw new NegocioException("Erro ao tentar obter os objetos.", e);
             }

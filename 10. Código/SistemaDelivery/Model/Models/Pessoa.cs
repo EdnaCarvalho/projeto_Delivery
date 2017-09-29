@@ -40,7 +40,7 @@ namespace Model.Models
 
         [Required(ErrorMessage = "O email é obrigatório.")]
         [StringLength(50, MinimumLength = 5, ErrorMessage = "Email inválido.")]
-        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$")]
+        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$", ErrorMessage = "Digite uma email válido.")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email
@@ -50,7 +50,7 @@ namespace Model.Models
         }
 
         [Required(ErrorMessage = "O telefone é obrigatória.")]
-        [StringLength(12)]
+        [StringLength(13, ErrorMessage = "Digite uma número invalido. Ex.: 79 99999-9999")]
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Digite apenas dígitos.")]
         [Display(Name = "Telefone")]
@@ -69,7 +69,7 @@ namespace Model.Models
             get { return senha; }
             set { senha = value; }
         }
-        [Required]
+
         [DataType(DataType.Password)]
         [Compare("Senha")]
         [Display(Name = "Confirmar Senha")]
@@ -87,8 +87,7 @@ namespace Model.Models
             get { return login; }
             set { login = value; }
         }
-
-        [Required]
+        
         public Endereco Endereco
         {
             get { return endereco; }

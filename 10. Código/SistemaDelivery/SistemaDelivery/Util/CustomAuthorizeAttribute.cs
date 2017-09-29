@@ -5,7 +5,7 @@ using System.Web.Routing;
 
 namespace SistemaDelivery.Util
 {
-    public enum TipoUsuario { EMPRESA, CLIENTE, ADMINISTRADOR }
+    public enum TipoUsuario { EMPRESA, CLIENTE, ADMINISTRADOR , USUARIO}
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
         #region PropriedadesConstrutor
@@ -52,6 +52,9 @@ namespace SistemaDelivery.Util
                     if (httpContext.Request.IsAuthenticated && ((typeof(Usuario) == pessoa.GetType() && ((Usuario)pessoa).IsAdmin && NivelAcesso == TipoUsuario.ADMINISTRADOR) || AllowAccess))
                 return true;
             else
+                    if (httpContext.Request.IsAuthenticated && ((typeof(Usuario) == pessoa.GetType() && NivelAcesso == TipoUsuario.USUARIO) || AllowAccess))
+                return true;
+            else
                 return false;
         }
 
@@ -81,7 +84,7 @@ namespace SistemaDelivery.Util
                 }
                 else
                 {
-                    if ((typeof(Usuario) == pessoa.GetType() && ((Usuario)pessoa).IsAdmin ))
+                    if ((typeof(Usuario) == pessoa.GetType() && ((Usuario)pessoa).IsAdmin))
                     {
                         rota["controller"] = "Administrador";
                         rota["action"] = "Index";
