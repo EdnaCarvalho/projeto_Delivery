@@ -41,8 +41,9 @@ namespace Negocio.Business
 
         public void Remover(Produto produto)
         {
-            try { 
-            persistencia.Remover(produto);
+            try
+            {
+                persistencia.Remover(produto);
             }
             catch (PersistenciaException e)
             {
@@ -52,8 +53,9 @@ namespace Negocio.Business
 
         public Produto Obter(int? id)
         {
-            try { 
-            return persistencia.Obter(e => e.Id == id);
+            try
+            {
+                return persistencia.Obter(e => e.Id == id);
             }
             catch (PersistenciaException e)
             {
@@ -61,10 +63,11 @@ namespace Negocio.Business
             }
         }
 
-        public List<Produto> ObterTodos(int codigoEmpresa)
+        public List<Produto> ObterTodos(int? codigoEmpresa)
         {
-            try { 
-            return persistencia.ObterTodos(codigoEmpresa);
+            try
+            {
+                return persistencia.ObterTodos(codigoEmpresa);
             }
             catch (PersistenciaException e)
             {
@@ -74,8 +77,9 @@ namespace Negocio.Business
 
         public List<TipoProduto> ObterTodosTipos()
         {
-            try { 
-            return persistencia.ObterTodosTipos();
+            try
+            {
+                return persistencia.ObterTodosTipos();
             }
             catch (PersistenciaException e)
             {
@@ -85,8 +89,9 @@ namespace Negocio.Business
 
         public TipoProduto ObterTipoProduto(int? id)
         {
-            try {
-            return persistencia.ObterTipo(t => t.Id == id);
+            try
+            {
+                return persistencia.ObterTipo(t => t.Id == id);
             }
             catch (PersistenciaException e)
             {

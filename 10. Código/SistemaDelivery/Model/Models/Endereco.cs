@@ -67,19 +67,6 @@ namespace Model.Models
             set { estado = value; }
         }
 
-        #endregion
-
-        #region Construtor
-
-        public Endereco()
-        {
-            Cidade = null;
-            Bairro = null;
-            RuaAv = null;
-            Numero = null;
-            Estado = null;
-        }
-
-       #endregion
+        #endregion   
     }
 }

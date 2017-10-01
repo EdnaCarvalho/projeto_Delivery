@@ -1,10 +1,25 @@
-﻿using System.Web.Mvc;
+﻿using Model.Models;
+using Model.Models.Exceptions;
+using Negocio.Business;
+using SistemaDelivery.Util;
+using System;
+using System.Web.Mvc;
 
 namespace SistemaDelivery.Controllers
 {
     public class PedidoController : Controller
     {
-        // GET: Pedido
+        private GerenciadorProduto gerenciadorProduto;
+        private GerenciadorPessoa gerenciadorPessoa;
+        private GerenciadorPedido gerenciadorPedido;
+
+        public PedidoController()
+        {
+            gerenciadorProduto = new GerenciadorProduto();
+            gerenciadorPessoa = new GerenciadorPessoa();
+            gerenciadorPedido = new GerenciadorPedido();
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -16,10 +31,27 @@ namespace SistemaDelivery.Controllers
             return View();
         }
 
-        // GET: Pedido/Create
-        public ActionResult Create()
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.USUARIO)]
+        public ActionResult Create(int? id)
         {
-            return View();
+            try
+            {
+                if (id.HasValue)
+                {
+                    ViewBag.ListaProduto = new SelectList(gerenciadorProduto.ObterTodos(id), "Id", "Produtos");
+                }
+                return View();
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações para criação do objeto.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter as informações para criação do objeto.", e);
+            }
+
         }
 
         // POST: Pedido/Create

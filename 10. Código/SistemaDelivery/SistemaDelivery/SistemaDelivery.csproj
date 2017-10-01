@@ -223,11 +223,11 @@
     <Content Include="Views\Cliente\AlterarSenha.cshtml" />
     <Content Include="Views\Administrador\AlterarSenha.cshtml" />
     <Content Include="Views\Cliente\Cadastro.cshtml" />
+    <Content Include="Views\Pedido\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\imagem\" />
-    <Folder Include="Views\Pedido\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

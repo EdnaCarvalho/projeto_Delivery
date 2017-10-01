@@ -41,8 +41,7 @@ namespace Persistencia.Persistence
         public void Editar(Pessoa pessoa)
         {
             try
-            {
-
+            { 
                 if (pessoa.GetType() == typeof(Usuario))
                 {
                     int posicao = listaUsuario.FindIndex(e => e.Id == pessoa.Id);

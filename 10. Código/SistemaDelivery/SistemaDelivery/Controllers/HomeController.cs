@@ -151,6 +151,7 @@ namespace SistemaDelivery.Controllers
             {
                 throw new ControllerException("Erro ao tentar acessar ação", e);
             }
-        }
+        }      
+           
     }
 }

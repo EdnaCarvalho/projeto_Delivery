@@ -52,15 +52,5 @@ namespace Model.Models
 
         #endregion
 
-        #region Construtor
-
-        public TipoProduto()
-        {
-            Marca = null;
-            Tipo = null;
-            Descricao = null;
-        }
-
-        #endregion
     }
 }

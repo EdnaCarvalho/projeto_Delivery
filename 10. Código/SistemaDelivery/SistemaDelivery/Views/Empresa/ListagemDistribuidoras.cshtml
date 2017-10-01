@@ -40,8 +40,7 @@
                                                      }))
                                                  :
                                                      new HtmlString(String.Format("{0}    {1}", new object[] {
-                                                Html.ActionLink("Realizar Pedido","Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
-                                                Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
+                                                        Html.ActionLink("Detalhes", "Details", new {id = item.Id }, new { @class = "btn btn-default" }).ToString()
                                                      }))
                                          )
                                      )
@@ -52,6 +51,10 @@
                             <p>
                                 @Html.ActionLink("Adicionar Novo", "Create", new { controller = "Empresa" }, new { @class = "btn btn-default" })
                             </p>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Realizar Pedido", "Create", new { controller = "Pedido" }, new { @class = "btn btn-default" })
                         }
                     }
 

@@ -87,7 +87,7 @@ namespace Model.Models
             get { return login; }
             set { login = value; }
         }
-        
+
         public Endereco Endereco
         {
             get { return endereco; }

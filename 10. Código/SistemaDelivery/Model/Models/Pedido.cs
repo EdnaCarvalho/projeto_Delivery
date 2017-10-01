@@ -58,7 +58,7 @@ namespace Model.Models
 
         [Range(typeof(DateTime), "1/1/2017", "31/12/2030")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "dd/mm/yyyy")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime DataRealizacao
         {
             get { return dataRealizacao; }
@@ -67,7 +67,7 @@ namespace Model.Models
 
         [Range(typeof(DateTime), "1/1/2017", "31/12/2018")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "dd/mm/yyyy")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime DataFinalizacao
         {
             get { return dataFinalizacao; }

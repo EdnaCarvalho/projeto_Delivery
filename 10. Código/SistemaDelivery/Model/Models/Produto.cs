@@ -58,15 +58,5 @@ namespace Model.Models
 
         #endregion
 
-        #region Construtor
-
-        public Produto()
-        {
-            Empresa = null;
-            Quantidade = 0;
-            Preco = 0.0;
-        }
-
-        #endregion
     }
 }

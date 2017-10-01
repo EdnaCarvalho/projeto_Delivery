@@ -76,7 +76,7 @@ namespace Persistencia.Persistence
             }
         }
 
-        public List<Produto> ObterTodos(int codigoEmpresa)
+        public List<Produto> ObterTodos(int? codigoEmpresa)
         {
             try
             {
