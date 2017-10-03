@@ -3,72 +3,108 @@
 @{
     ViewBag.Title = "Details";
 }
+<div class="form-horizontal">
+    <div class="container text-center">
+        <div class="row thumbnail">
+            <div class="control-label col-md-12">
+                <div class="row thumbnail">
+                    <div class="control-label col-md-6">
+                        <div class="row thumbnail">
+                            <center>
+                                <h2> Informações Sobre a Empresa </h2>
+                            </center>
+                            <hr />
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Telefone, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Telefone, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Endereco.Bairro, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Endereco.Bairro, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Endereco.RuaAv, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Endereco.RuaAv, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                <div class="col-md-2"> </div>
+                            </div>
 
-<center>
-    <div class="form-horizontal">
-        <div class="container text-center">
-            <div class="row thumbnail">
-                <h2> Dados de:   @Html.DisplayFor(model => model.Nome)  </h2>
-                <hr />
-                <div class="form-group">
-                    <div>
-                        @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-3">
-                            @Html.DisplayFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control"} })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Endereco.Cidade, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Endereco.Cidade, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Endereco.Numero, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Endereco.Numero, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="control-label col-md-6">
+                        <div class="row thumbnail ">
+                            <center>
+                                <h2>Produtos</h2>
+                                <hr />
+                                @if (ViewBag.ListaProduto == null)
+                                {
+                                    <p> Nenhum produto cadastrado. </p>
+                                }
+                                else
+                                {
 
-                        @Html.LabelFor(model => model.Telefone, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-3">
-                            @Html.DisplayFor(model => model.Telefone, new { htmlAttributes = new { @class = "form-control" } })
+                                    WebGrid tabela = new WebGrid(source: ViewBag.ListaProduto, rowsPerPage: 3, canPage: true,
+                                    canSort: true, defaultSort: "Produto");
+                                    @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
+                                    emptyRowCellValue: "---", mode: WebGridPagerModes.All, numericLinksCount: 2,
+                                    tableStyle: "table",
+                                    columns: tabela.Columns(
+                                        tabela.Column("TipoProduto.Tipo", "Tipo"),
+                                        tabela.Column("TipoProduto.Marca", "Marca"),
+                                        tabela.Column("TipoProduto.Descricao", "Descrição"),
+                                        tabela.Column("Preco", "Preço"),
+                                        tabela.Column("Quantidade", "Quantidade"),
+                                        tabela.Column("Ações", "Ações", canSort: false,
+                                        format: (item) => new HtmlString(String.Format("", new object[] {
+                                           }))
+                                        )
+                                    )
+                                );
+                                }
+                            </center>
                         </div>
-                        <div class="col-md-2"> </div>
                     </div>
                 </div>
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Endereco.Bairro, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-3">
-                        @Html.DisplayFor(model => model.Endereco.Bairro, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-
-                    @Html.LabelFor(model => model.Endereco.RuaAv, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-3">
-                        @Html.DisplayFor(model => model.Endereco.RuaAv, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-2"> </div>
+            </div>
+            <br />
+            <div class="control-label col-md-12">
+                <div class="col-md-5">
+                    @Html.ActionLink("Realizar Pedido", "ListagemDistribuidoras", new { controller = "Empresa" }, new { @class = "btn btn-default" })
                 </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Endereco.Cidade, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-3">
-                        @Html.DisplayFor(model => model.Endereco.Cidade, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-
-                    @Html.LabelFor(model => model.Endereco.Numero, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-3">
-                        @Html.DisplayFor(model => model.Endereco.Numero, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-2"> </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-3">
-                        @Html.DisplayFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-
-                    @Html.LabelFor(model => model.Endereco.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-3">
-                        @Html.DisplayFor(model => model.Endereco.Estado, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-2"> </div>
-                </div>                
-                <br />
-                <p>
+                <div class="col-md-3">
                     @Html.ActionLink("Voltar", "ListagemDistribuidoras", new { controller = "Empresa" }, new { @class = "btn btn-default" })
-                </p>
+                </div>
             </div>
         </div>
     </div>
-</center>
+</div>

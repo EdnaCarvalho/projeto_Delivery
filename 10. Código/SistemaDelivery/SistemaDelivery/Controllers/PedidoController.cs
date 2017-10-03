@@ -37,10 +37,7 @@ namespace SistemaDelivery.Controllers
         {
             try
             {
-                if (id.HasValue)
-                {
-                    ViewBag.ListaProduto = new SelectList(gerenciadorProduto.ObterTodos(id), "Id", "Produtos");
-                }
+                
                 return View();
             }
             catch (NegocioException n)

@@ -12,10 +12,12 @@ namespace SistemaDelivery.Controllers
     public class EmpresaController : Controller
     {
         private GerenciadorPessoa gerenciador;
+        private GerenciadorProduto gerenciadorProduto;
 
         public EmpresaController()
         {
             gerenciador = new GerenciadorPessoa();
+            gerenciadorProduto = new GerenciadorProduto();
         }
 
         [Authenticated]
@@ -46,7 +48,15 @@ namespace SistemaDelivery.Controllers
                 {
                     Empresa empresa = gerenciador.ObterEmpresa(id);
                     if (empresa != null)
+                    {
+                        List<Produto> produtos = gerenciadorProduto.ObterTodos(id);
+                        if (produtos == null || produtos.Count == 0)
+                        {
+                            produtos = null;
+                        }
+                        ViewBag.ListaProduto = produtos;
                         return View(empresa);
+                    }
                 }
                 return RedirectToAction("Index");
             }
