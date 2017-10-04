@@ -17,11 +17,13 @@ namespace Persistencia.Persistence
 
         public Pedido Adicionar(Pedido pedido)
         {
-			try{
-				pedido.Id = listaPedidos.Count + 1;
-				listaPedidos.Add(pedido);
-				return pedido; 
-			catch (Exception e)
+            try
+            {
+                pedido.Id = listaPedidos.Count + 1;
+                listaPedidos.Add(pedido);
+                return pedido;
+            }
+            catch (Exception e)
             {
                 throw new PersistenciaException("Erro ao tentar adicionar objeto.", e);
             }

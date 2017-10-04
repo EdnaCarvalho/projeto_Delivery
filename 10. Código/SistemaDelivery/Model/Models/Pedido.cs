@@ -17,7 +17,7 @@ namespace Model.Models
         private DateTime dataFinalizacao;
         private string descricao;
         private string status;
-        private string enderecoEntrega;
+        private Endereco enderecoEntrega;
         private List<Notificacao> notificacoes;
 
         #endregion
@@ -50,6 +50,7 @@ namespace Model.Models
             set { cliente = value; }
         }
         
+        [Required]
         public List<Produto> Produtos
         {
             get { return produtos; }
@@ -79,9 +80,8 @@ namespace Model.Models
             get { return descricao; }
             set { descricao = value; }
         }
-
-        [Required]
-        public string EnderecoEntrega
+        
+        public Endereco EnderecoEntrega
         {
             get { return enderecoEntrega; }
             set { enderecoEntrega = value; }
@@ -94,24 +94,6 @@ namespace Model.Models
         }
 
         #endregion
-
-        #region Construtor
-
-        public Pedido()
-        {
-            Empresa = null;   
-            Cliente = null;
-            status = null;
-            Produtos = new List<Produto>();
-            Notificacoes = new List<Notificacao>();
-            DataRealizacao = DateTime.Now;
-            DataFinalizacao = DateTime.Now;
-            Descricao = null;
-            EnderecoEntrega = null;
-            Notificacoes = null;
-        }
-
-        #endregion
-
+     
     }
 }

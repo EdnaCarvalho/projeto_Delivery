@@ -3,6 +3,7 @@ using Model.Models.Exceptions;
 using Negocio.Business;
 using SistemaDelivery.Util;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace SistemaDelivery.Controllers
@@ -33,12 +34,26 @@ namespace SistemaDelivery.Controllers
 
         [Authenticated]
         [CustomAuthorize(NivelAcesso = Util.TipoUsuario.USUARIO)]
-        public ActionResult Create(int? id)
+        public ActionResult RealizarPedido(int? id)
         {
             try
             {
-                
-                return View();
+                Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
+                if (cliente != null)
+                {
+                    List<Produto> produtos = gerenciadorProduto.ObterTodos(id);
+                    if (produtos == null || produtos.Count == 0)
+                    {
+                        produtos = null;
+                    }
+
+                    ViewBag.Empresa = gerenciadorPessoa.ObterEmpresa(id);
+                    ViewBag.ListaProduto = produtos;
+                    ViewBag.Endereco = cliente.Endereco;
+                    return View();
+                }
+                else
+                    return RedirectToAction("Index");
             }
             catch (NegocioException n)
             {
@@ -51,19 +66,28 @@ namespace SistemaDelivery.Controllers
 
         }
 
-        // POST: Pedido/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult RealizarPedido(Empresa empresa, FormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    Pedido pedido = new Pedido();
+                    TryUpdateModel<Pedido>(pedido, collection.ToValueProvider());
+                    pedido.Status = "ESPERA";
+                    gerenciadorPedido.Adicionar(pedido);
+                    return RedirectToAction("ListagemDistribuidoras", "Empresa");
+                }
+                return RedirectToAction("ListagemDistribuidoras", "Empresa");
             }
-            catch
+            catch (NegocioException n)
             {
-                return View();
+                throw new ControllerException("Erro ao tentar criar o objeto.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar criar o objeto.", e);
             }
         }
 

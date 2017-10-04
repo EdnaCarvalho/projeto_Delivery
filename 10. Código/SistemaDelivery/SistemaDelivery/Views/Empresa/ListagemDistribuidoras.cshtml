@@ -22,7 +22,7 @@
                         }
                         else
                         {
-                            WebGrid tabela = new WebGrid(source: Model, rowsPerPage: 4, canPage: true,
+                            WebGrid tabela = new WebGrid(source: Model, rowsPerPage: 7, canPage: true,
                                                                 canSort: true, defaultSort: "Empresa");
                             @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
                                      emptyRowCellValue: "___", mode: WebGridPagerModes.All, numericLinksCount: 2, tableStyle: "table",
@@ -36,12 +36,12 @@
                                                 Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                                 Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                                 Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
-                                                Html.ActionLink("Realizar Pedido","Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                                Html.ActionLink("Realizar Pedido","RealizarPedido",new { controller = "Pedido" , id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                                      }))
                                                  :
-                                                     new HtmlString(String.Format("{0}    {1}", new object[] {
-                                                        Html.ActionLink("Detalhes", "Details", new {id = item.Id }, new { @class = "btn btn-default" }).ToString()
-                                                     }))
+                                                    new HtmlString(String.Format("{0}    {1}", new object[] {
+                                                    Html.ActionLink("Detalhes", "Details", new {id = item.Id }, new { @class = "btn btn-default" }).ToString()
+                                                    }))
                                          )
                                      )
                                  );
