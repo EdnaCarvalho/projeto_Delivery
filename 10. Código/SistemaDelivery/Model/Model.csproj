@@ -76,6 +76,7 @@
     <Compile Include="Models\Exceptions\ViewException.cs" />
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Endereco.cs" />
+    <Compile Include="Models\ItemPedido.cs" />
     <Compile Include="Models\Notificacao.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Pessoa.cs" />

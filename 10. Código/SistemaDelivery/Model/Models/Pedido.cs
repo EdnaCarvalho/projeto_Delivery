@@ -6,19 +6,18 @@ namespace Model.Models
 {
     public class Pedido
     {
-
         #region Atributos
 
         private int id;
         private Empresa empresa;
         private Usuario cliente;
-        private List<Produto> produtos;
         private DateTime dataRealizacao;
-        private DateTime dataFinalizacao;
+        private DateTime? dataFinalizacao;
         private string descricao;
         private string status;
         private Endereco enderecoEntrega;
         private List<Notificacao> notificacoes;
+        private List<ItemPedido> itens;
 
         #endregion
 
@@ -50,13 +49,7 @@ namespace Model.Models
             set { cliente = value; }
         }
         
-        [Required]
-        public List<Produto> Produtos
-        {
-            get { return produtos; }
-            set { produtos = value; }
-        }
-
+       
         [Range(typeof(DateTime), "1/1/2017", "31/12/2030")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
@@ -69,7 +62,7 @@ namespace Model.Models
         [Range(typeof(DateTime), "1/1/2017", "31/12/2018")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime DataFinalizacao
+        public DateTime? DataFinalizacao
         {
             get { return dataFinalizacao; }
             set { dataFinalizacao = value; }
@@ -93,7 +86,12 @@ namespace Model.Models
             set { notificacoes = value; }
         }
 
+        public List<ItemPedido> Itens
+        {
+            get { return itens; }
+            set { itens = value; }
+        }
         #endregion
-     
+
     }
 }

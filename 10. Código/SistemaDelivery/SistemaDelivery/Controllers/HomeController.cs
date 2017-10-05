@@ -18,7 +18,7 @@ namespace SistemaDelivery.Controllers
             gerenciador = new GerenciadorPessoa();
 
             //TODO Retirar após os testes
-            if (gerenciador.ObterByLogin("admin") == null)
+            if (gerenciador.ObterByLogin("admin") == null && gerenciador.ObterByLogin("empresa") == null)
             {
                 Endereco endereco = new Endereco { Bairro = "hhhhhhhhhhhhhhhh", Cidade = "hhjjjjjjjjjjjjjj", Estado = "se", Numero = "77", RuaAv = "jjjjjjjjjjjjjjjjjjjj" };
                 Usuario administrador = new Usuario
@@ -28,13 +28,30 @@ namespace SistemaDelivery.Controllers
                     IsAdmin = true,
                     Telefone = "99999999",
                     Senha = "admin",
-                    ConfirmarSenha = "12345",
                     Endereco = endereco,
                     Login = "admin",
                     Pedidos = null
                 };
+                Empresa empresa = new Empresa
+                {
+                    Nome = "Distribuidora Deus é maior",
+                    Cnpj = "999999999999",
+                    Cpf = "99999999",
+                    Email = "ii@juj.hhh",
+                    Endereco = endereco,
+                    Login = "empresa",
+                    Pedidos = null,
+                    Produtos = null,
+                    Proprietario = "jjjjjjjj",
+                    Status = "Aberto",
+                    Telefone = "99999999"
+                };
+                empresa.Senha = Criptografia.GerarHashSenha(empresa.Login + "empresa");
+                empresa.ConfirmarSenha = empresa.Senha;
                 administrador.Senha = Criptografia.GerarHashSenha(administrador.Login + administrador.Senha);
+                administrador.ConfirmarSenha = administrador.Senha;
                 gerenciador.Adicionar(administrador);
+                gerenciador.Adicionar(empresa);
             }
         }
 

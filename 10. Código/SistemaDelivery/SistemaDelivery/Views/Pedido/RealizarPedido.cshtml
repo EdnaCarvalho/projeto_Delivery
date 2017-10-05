@@ -63,6 +63,8 @@
                                     @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
                                 </div>
+                                <center> Ex.: valor de troco , horario de entrega que queira receber o pedido...</center>
+
                             </div>
                         </div>
                         <br />
@@ -78,7 +80,6 @@
                         <div class="row thumbnail">
                             <center>
                                 <h2> Produtos</h2>
-
                                 <hr />
                                 @if (ViewBag.ListaProduto == null)
                                 {
@@ -87,23 +88,26 @@
                                 else
                                 {
                                     List<Model.Models.Produto> produtos = ViewBag.ListaProduto;
+
                                     WebGrid tabela = new WebGrid(source: produtos, rowsPerPage: 5, canPage: true,
                                     canSort: true, defaultSort: "Produto");
                                     @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
                                     emptyRowCellValue: "---", mode: WebGridPagerModes.All, numericLinksCount: 2,
                                     tableStyle: "table",
                                     columns: tabela.Columns(
+                                        tabela.Column(format: (item) => new HtmlString(String.Format("{0}", new object[] {
+                                            Html.CheckBox("produtos",  new { @value = item.Id,}).ToHtmlString()}))),
                                         tabela.Column("TipoProduto.Tipo", "Tipo"),
                                         tabela.Column("TipoProduto.Marca", "Marca"),
                                         tabela.Column("TipoProduto.Descricao", "Descrição"),
                                         tabela.Column("Preco", "Preço"),
-                                        tabela.Column("Quantidade", "Quantidade")
+                                        tabela.Column(header: "Total Desejado", format: (item) => new HtmlString(String.Format("{0}", new object[] {
+                                            Html.Editor("total").ToHtmlString()})))
                                     )
                                 );
                                 }
                             </center>
-                        </div>      
-
+                        </div>
                         <br />
                         <div>
                             <div class="col-md-3">
@@ -118,4 +122,6 @@
     </div>
 }
 
-
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

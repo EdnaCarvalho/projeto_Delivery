@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model.Models
@@ -8,7 +9,7 @@ namespace Model.Models
         #region Atributos
 
         private int id;
-        private double preco;
+        private decimal preco;
         private int quantidade;
         private Empresa empresa;
         private TipoProduto tipoProduto;
@@ -24,11 +25,9 @@ namespace Model.Models
             set { id = value; }
         }
         
-        [Required (ErrorMessage = "O preço é obrigatório.")]
-        [Display(Name = "Preco por Unidade")]
-        [DataType(DataType.Text)]
-        [DisplayFormat(DataFormatString = "{0:C}")]
-        public double Preco
+       [Required (ErrorMessage = "O preço é obrigatório.")]
+       [Display(Name = "Preço por Unidade")]
+        public decimal Preco
         {
             get { return preco; }
             set { preco = value; }

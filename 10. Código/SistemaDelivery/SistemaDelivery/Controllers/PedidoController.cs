@@ -22,12 +22,7 @@ namespace SistemaDelivery.Controllers
             gerenciadorPessoa = new GerenciadorPessoa();
             gerenciadorPedido = new GerenciadorPedido();
         }
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        
         // GET: Pedido/Details/5
         public ActionResult Details(int id)
         {
@@ -82,14 +77,14 @@ namespace SistemaDelivery.Controllers
                     {
                         produtos = null;
                     }
-
-                    ViewBag.Empresa = gerenciadorPessoa.ObterEmpresa(id);
+                    //Como pegar a empresa na view e passar para o pedido
+                    ViewBag.Empresa = gerenciadorPessoa.ObterEmpresa(id);                    
                     ViewBag.ListaProduto = produtos;
                     ViewBag.Endereco = cliente.Endereco;
                     return View();
                 }
                 else
-                    return RedirectToAction("Index");
+                    return RedirectToAction("ListagemDistribuidoras", "Empresa");
             }
             catch (NegocioException n)
             {
@@ -103,17 +98,27 @@ namespace SistemaDelivery.Controllers
         }
 
         [HttpPost]
-        public ActionResult RealizarPedido(Empresa empresa, FormCollection collection)
+        [Authenticated]
+        [CustomAuthorize(NivelAcesso = Util.TipoUsuario.USUARIO)]
+        public ActionResult RealizarPedido(FormCollection collection)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Pedido pedido = new Pedido();
-                    TryUpdateModel<Pedido>(pedido, collection.ToValueProvider());
-                    pedido.Status = "ESPERA";
-                    gerenciadorPedido.Adicionar(pedido);
-                    return RedirectToAction("ListagemDistribuidoras", "Empresa");
+                    Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
+                    if (cliente != null)
+                    {
+                        Pedido pedido = new Pedido();
+                        TryUpdateModel<Pedido>(pedido, collection.ToValueProvider());
+                        pedido.Status = "ESPERA";
+                        pedido.Cliente = cliente;
+                        pedido.DataRealizacao = DateTime.Now;
+                        pedido.DataFinalizacao = null;
+                        List<ItemPedido> itens = new List<ItemPedido>();
+                        gerenciadorPedido.Adicionar(pedido);
+                        return RedirectToAction("ListagemPedidos", "Pedido");
+                    }
                 }
                 return RedirectToAction("ListagemDistribuidoras", "Empresa");
             }
@@ -125,29 +130,7 @@ namespace SistemaDelivery.Controllers
             {
                 throw new ControllerException("Erro ao tentar criar o objeto.", e);
             }
-        }
-
-        // GET: Pedido/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Pedido/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        }        
 
         // GET: Pedido/Delete/5
         public ActionResult Delete(int id)
