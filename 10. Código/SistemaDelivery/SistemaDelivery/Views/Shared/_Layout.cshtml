@@ -23,6 +23,8 @@
                 }
                 else
                 {
+                    <li>@Html.ActionLink(" MEUS PEDIDOS ", "ListagemPedidos", "Pedido")</li>
+
                     String controlle = "";
                     Model.Models.Pessoa pessoa = SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) as Model.Models.Pessoa;
                     if (typeof(Model.Models.Empresa) == pessoa.GetType())

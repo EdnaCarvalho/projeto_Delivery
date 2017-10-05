@@ -4,6 +4,7 @@ using Negocio.Business;
 using SistemaDelivery.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace SistemaDelivery.Controllers
@@ -13,6 +14,7 @@ namespace SistemaDelivery.Controllers
         private GerenciadorProduto gerenciadorProduto;
         private GerenciadorPessoa gerenciadorPessoa;
         private GerenciadorPedido gerenciadorPedido;
+        
 
         public PedidoController()
         {
@@ -30,6 +32,40 @@ namespace SistemaDelivery.Controllers
         public ActionResult Details(int id)
         {
             return View();
+        }
+
+        [Authenticated]
+        public ActionResult ListagemPedidos()
+        {
+            try
+            {
+                Pessoa pessoa = SessionHelper.Get(SessionKeys.Pessoa) as Pessoa;
+                if(pessoa != null)
+                {
+                    List<Pedido> pedidos;
+                    if (pessoa.GetType() == typeof(Usuario))
+                    {
+                        pedidos = gerenciadorPedido.ObterTodos().Where(p => p.Cliente.Id == pessoa.Id).ToList();
+                    }
+                    else
+                    {
+                       pedidos = gerenciadorPedido.ObterTodos().Where(p => p.Empresa.Id == pessoa.Id).ToList();
+                    }
+                    if (pedidos == null || pedidos.Count == 0)
+                        pedidos = null;
+                    return View(pedidos);
+                }
+                    return RedirectToAction("Index");
+
+            }
+            catch (NegocioException n)
+            {
+                throw new ControllerException("Erro ao tentar obter os objetos.", n);
+            }
+            catch (Exception e)
+            {
+                throw new ControllerException("Erro ao tentar obter os objetos.", e);
+            }
         }
 
         [Authenticated]
