@@ -7,14 +7,10 @@
 {
     @Html.AntiForgeryToken()
 
-    Model.Models.Endereco endereco = ViewBag.Endereco;
-    Model.Models.Empresa empresa = ViewBag.Empresa;
-
     <div class="form-horizontal">
         <div class="container text-center">
             <div class="row thumbnail">
                 <div class="control-label col-md-12">
-
                     <center>
                         <h4> Informações Sobre o Pedido</h4>
                     </center>
@@ -29,30 +25,29 @@
                             <div class="form-group">
                                 @Html.LabelFor(model => model.EnderecoEntrega.Bairro, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-3">
-                                    @Html.EditorFor(model => endereco.Bairro, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.EnderecoEntrega.Bairro, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.EnderecoEntrega.Bairro, "", new { @class = "text-danger" })
                                 </div>
-
                             </div>
                             <div class="form-group">
 
                                 @Html.LabelFor(model => model.EnderecoEntrega.RuaAv, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-3">
-                                    @Html.EditorFor(model => endereco.RuaAv, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.EnderecoEntrega.RuaAv, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.EnderecoEntrega.RuaAv, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(model => model.EnderecoEntrega.Cidade, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-3">
-                                    @Html.EditorFor(model => endereco.Cidade, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.EnderecoEntrega.Cidade, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.EnderecoEntrega.Cidade, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(model => model.EnderecoEntrega.Numero, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-3">
-                                    @Html.EditorFor(model => endereco.Numero, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.EnderecoEntrega.Numero, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.EnderecoEntrega.Numero, "", new { @class = "text-danger" })
                                 </div>
                             </div>

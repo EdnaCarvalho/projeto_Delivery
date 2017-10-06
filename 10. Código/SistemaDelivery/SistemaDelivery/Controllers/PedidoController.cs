@@ -21,13 +21,7 @@ namespace SistemaDelivery.Controllers
             gerenciadorProduto = new GerenciadorProduto();
             gerenciadorPessoa = new GerenciadorPessoa();
             gerenciadorPedido = new GerenciadorPedido();
-        }
-        
-        // GET: Pedido/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        }       
 
         [Authenticated]
         public ActionResult ListagemPedidos()
@@ -72,16 +66,16 @@ namespace SistemaDelivery.Controllers
                 Usuario cliente = (Usuario)SessionHelper.Get(SessionKeys.Pessoa);
                 if (cliente != null)
                 {
+                    Pedido pedido = new Pedido();
+                    pedido.Empresa = gerenciadorPessoa.ObterEmpresa(id);
+                    pedido.EnderecoEntrega = cliente.Endereco;
                     List<Produto> produtos = gerenciadorProduto.ObterTodos(id);
                     if (produtos == null || produtos.Count == 0)
                     {
                         produtos = null;
-                    }
-                    //Como pegar a empresa na view e passar para o pedido
-                    ViewBag.Empresa = gerenciadorPessoa.ObterEmpresa(id);                    
+                    }                  
                     ViewBag.ListaProduto = produtos;
-                    ViewBag.Endereco = cliente.Endereco;
-                    return View();
+                    return View(pedido);
                 }
                 else
                     return RedirectToAction("ListagemDistribuidoras", "Empresa");
@@ -130,7 +124,13 @@ namespace SistemaDelivery.Controllers
             {
                 throw new ControllerException("Erro ao tentar criar o objeto.", e);
             }
-        }        
+        }
+
+        // GET: Pedido/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
 
         // GET: Pedido/Delete/5
         public ActionResult Delete(int id)
