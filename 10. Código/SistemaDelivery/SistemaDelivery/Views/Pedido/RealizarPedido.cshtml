@@ -1,0 +1,122 @@
+﻿@model Model.Models.Pedido
+
+@{
+    ViewBag.Title = "RealizarPedido";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="container text-center">
+            <div class="row thumbnail">
+                <div class="control-label col-md-12">
+                    <center>
+                        <h4> Informações Sobre o Pedido</h4>
+                    </center>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="control-label col-md-6">
+                        <div class="row thumbnail">
+                            <center>
+                                <h2> Local e Detalhes da Entrega</h2>
+                            </center>
+                            <hr />
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EnderecoEntrega.Bairro, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.EditorFor(model => model.EnderecoEntrega.Bairro, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EnderecoEntrega.Bairro, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                @Html.LabelFor(model => model.EnderecoEntrega.RuaAv, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.EditorFor(model => model.EnderecoEntrega.RuaAv, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EnderecoEntrega.RuaAv, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EnderecoEntrega.Cidade, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.EditorFor(model => model.EnderecoEntrega.Cidade, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EnderecoEntrega.Cidade, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EnderecoEntrega.Numero, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.EditorFor(model => model.EnderecoEntrega.Numero, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EnderecoEntrega.Numero, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                                </div>
+                                <center> Ex.: valor de troco , horario de entrega que queira receber o pedido...</center>
+
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="col-md-6"> </div>
+                            <div class="col-md-4">
+                                <input type="submit" value="Enviar" class="btn btn-default" />
+                            </div>
+                            <div class="col-md-2"> </div>
+                        </div>
+                    </div>
+                    <div class="control-label col-md-6">
+                        <div class="row thumbnail">
+                            <center>
+                                <h2> Produtos</h2>
+                                <hr />
+                                @if (ViewBag.ListaProduto == null)
+                                {
+                                    <p> Nenhum produto cadastrado. </p>
+                                }
+                                else
+                                {
+                                    List<Model.Models.Produto> produtos = ViewBag.ListaProduto;
+
+                                    WebGrid tabela = new WebGrid(source: produtos, rowsPerPage: 5, canPage: true,
+                                    canSort: true, defaultSort: "Produto");
+                                    @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
+                                    emptyRowCellValue: "---", mode: WebGridPagerModes.All, numericLinksCount: 2,
+                                    tableStyle: "table",
+                                    columns: tabela.Columns(
+                                        tabela.Column(format: (item) => new HtmlString(String.Format("{0}", new object[] {
+                                            Html.CheckBox("produtos",  new { @value = item.Id,}).ToHtmlString()}))),
+                                        tabela.Column("TipoProduto.Tipo", "Tipo"),
+                                        tabela.Column("TipoProduto.Marca", "Marca"),
+                                        tabela.Column("TipoProduto.Descricao", "Descrição"),
+                                        tabela.Column("Preco", "Preço"),
+                                        tabela.Column(header: "Total Desejado", format: (item) => new HtmlString(String.Format("{0}", new object[] {
+                                            Html.Editor("total").ToHtmlString()})))
+                                    )
+                                );
+                                }
+                            </center>
+                        </div>
+                        <br />
+                        <div>
+                            <div class="col-md-3">
+                                @Html.ActionLink("Cancelar", "ListagemDistribuidoras", new { controller = "Home" }, new { @class = "btn btn-default" })
+                            </div>
+                            <div class="col-md-5"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

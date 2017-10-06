@@ -14,6 +14,7 @@
                     @Html.HiddenFor(model => model.Id)
                     @Html.HiddenFor(model => model.Senha)
                     @Html.HiddenFor(model => model.ConfirmarSenha)
+                    @Html.HiddenFor(Model => Model.Login)
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -115,7 +116,7 @@
                             <input type="submit" value="Salvar" class="btn btn-default" />
                         </div>
                         <div class="col-md-2">
-                            @Html.ActionLink("Cancelar", "Index", new { Controller = "Empresa" }, new { @class = "btn btn-default" })
+                            @Html.ActionLink("Cancelar", "Index", new { controller = "Empresa" }, new { @class = "btn btn-default" })
                         </div>
                         <div class="col-md-4"> </div>
                     </div>
@@ -124,4 +125,8 @@
             </div>
         </div>
     </center>
+
+}
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
 }

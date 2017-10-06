@@ -23,7 +23,7 @@ namespace Model.Models
             set { id = value; }
         }
 
-        [Required]
+        [Required (ErrorMessage = "O marca é obrigatório.")]
         [Display(Name = "Marca do Produto")]
         [DataType(DataType.Text)]
         public string Marca
@@ -32,7 +32,7 @@ namespace Model.Models
             set { marca = value; }
         }
 
-        [Required]
+        [Required (ErrorMessage = "O tipo é obrigatório.")]
         [Display(Name = "Tipo do Produto")]
         [DataType(DataType.Text)]
         public string Tipo
@@ -41,7 +41,7 @@ namespace Model.Models
             set { tipo = value; }
         }
 
-        [Required]
+        [Required (ErrorMessage = "A descrição é obrigatório.")]
         [Display(Name = "Descrição do Produto")]
         [DataType(DataType.Text)]
         public string Descricao
@@ -52,15 +52,5 @@ namespace Model.Models
 
         #endregion
 
-        #region Construtor
-
-        public TipoProduto()
-        {
-            Marca = null;
-            Tipo = null;
-            Descricao = null;
-        }
-
-        #endregion
     }
 }

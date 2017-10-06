@@ -61,7 +61,7 @@
                             <input type="submit" value="Create" class="btn btn-default" />
                         </div>
                         <div class="col-md-3">
-                            @Html.ActionLink("Voltar", "Index", new { Controller = "Produto" }, new { @class = "btn btn-default" })                          
+                            @Html.ActionLink("Voltar", "Index", new { controller = "Produto" }, new { @class = "btn btn-default" })                          
                         </div>
                         <div class="col-md-3"> </div>
                     </div>
@@ -70,4 +70,9 @@
         </div>
 </center>
 }
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/JavaScript.js")
+}
+
 

@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TB_Editora">
+          <Key>
+            <PropertyRef Name="idEditora" />
+          </Key>
+          <Property Name="idEditora" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="45" />
+          <Property Name="rua" Type="varchar" MaxLength="30" />
+          <Property Name="bairro" Type="varchar" MaxLength="30" />
+          <Property Name="numero" Type="varchar" MaxLength="10" />
+          <Property Name="cep" Type="varchar" MaxLength="10" />
+          <Property Name="cidade" Type="varchar" MaxLength="30" />
+          <Property Name="estado" Type="varchar" MaxLength="2" />
+        </EntityType>
+        <EntityContainer Name="ModelModelsStoreContainer">
+          <EntitySet Name="TB_Editora" EntityType="Self.TB_Editora" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TB_Editora">
+          <Key>
+            <PropertyRef Name="idEditora" />
+          </Key>
+          <Property Name="idEditora" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="rua" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="bairro" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="numero" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="cep" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="cidade" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="SistemaDelivery" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TB_Editora" EntityType="Self.TB_Editora" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelModelsStoreContainer" CdmEntityContainer="SistemaDelivery">
+          <EntitySetMapping Name="TB_Editora">
+            <EntityTypeMapping TypeName="Model.Models.TB_Editora">
+              <MappingFragment StoreEntitySet="TB_Editora">
+                <ScalarProperty Name="idEditora" ColumnName="idEditora" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="rua" ColumnName="rua" />
+                <ScalarProperty Name="bairro" ColumnName="bairro" />
+                <ScalarProperty Name="numero" ColumnName="numero" />
+                <ScalarProperty Name="cep" ColumnName="cep" />
+                <ScalarProperty Name="cidade" ColumnName="cidade" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

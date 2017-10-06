@@ -70,7 +70,7 @@
                         @using (Html.BeginForm())
                         {
                             @Html.AntiForgeryToken()
-
+                            @Html.HiddenFor(model => model.Id)
                             <div class="form-actions no-color">
                                 <input type="submit" value="Delete" class="btn btn-default" />
 
@@ -78,7 +78,7 @@
                         }
                     </div>
                     <div class="col-md-2">
-                        @Html.ActionLink("Cancelar", "ListagemDistribuidoras", new { Controller = "Empresa" }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Cancelar", "ListagemDistribuidoras", new { controller = "Empresa" }, new { @class = "btn btn-default" })
                     </div>
                     <div class="col-md-2"> </div>
                 </div>

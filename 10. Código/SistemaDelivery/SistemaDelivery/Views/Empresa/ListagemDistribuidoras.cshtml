@@ -12,43 +12,54 @@
                 <div class="row thumbnail">
                     <h2>Distribuidoras</h2>
                     <hr />
-                    @if (Model == null)
+                    @if (SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) != null)
                     {
-                        <p> Nenhuma Empresa Cadastrada. </p>
-                    }
-                    else
-                    {
+                        Model.Models.Usuario usuario = (Model.Models.Usuario)SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa);
 
-                        WebGrid tabela = new WebGrid(source: Model, rowsPerPage: 4, canPage: true,
-                            canSort: true, defaultSort: "Empresa");
-                        @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
-                            emptyRowCellValue: "___", mode: WebGridPagerModes.All, numericLinksCount: 2, tableStyle: "table",
-                            columns: tabela.Columns(
-                                tabela.Column("Nome", "Nome"),
-                                tabela.Column("Status", "Status"),
-                                tabela.Column("Ações", "Ações", canSort: false,
-                                    format: (item) =>
-                                        (true) ?
-                                            new HtmlString(String.Format("{0}  {1}   {2}", new object[] {
+                        if (Model == null)
+                        {
+                            <p> Nenhuma Empresa Cadastrada. </p>
+                        }
+                        else
+                        {
+                            WebGrid tabela = new WebGrid(source: Model, rowsPerPage: 7, canPage: true,
+                                                                canSort: true, defaultSort: "Empresa");
+                            @tabela.GetHtml(caption: "", displayHeader: true, fillEmptyRows: true,
+                                     emptyRowCellValue: "___", mode: WebGridPagerModes.All, numericLinksCount: 2, tableStyle: "table",
+                                     columns: tabela.Columns(
+                                         tabela.Column("Nome", "Nome"),
+                                         tabela.Column("Status", "Status"),
+                                         tabela.Column("Ações", "Ações", canSort: false,
+                                             format: (item) =>
+                                                 (((Model.Models.Usuario)usuario).IsAdmin) ?
+                                                     new HtmlString(String.Format("{0}  {1}   {2}   {3}", new object[] {
                                                 Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                                 Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
                                                 Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
-                                            }))
-                                        :
-                                            new HtmlString(String.Format("{0}|{1}", new object[] {
-                                                Html.ActionLink("Realizar Pedido","Create", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
-                                                Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
-                                            }))
-                                )
-                            )
-                        );
+                                                Html.ActionLink("Realizar Pedido","RealizarPedido",new { controller = "Pedido" , id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                                     }))
+                                                 :
+                                                    new HtmlString(String.Format("{0}    {1}", new object[] {
+                                                    Html.ActionLink("Detalhes", "Details", new {id = item.Id }, new { @class = "btn btn-default" }).ToString()
+                                                    }))
+                                         )
+                                     )
+                                 );
+                        }
+                        if (((Model.Models.Usuario)usuario).IsAdmin)
+                        {
+                            <p>
+                                @Html.ActionLink("Adicionar Novo", "Create", new { controller = "Empresa" }, new { @class = "btn btn-default" })
+                            </p>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Realizar Pedido", "Create", new { controller = "Pedido" }, new { @class = "btn btn-default" })
+                        }
                     }
-                    <p>
-                        @Html.ActionLink("Adicionar Novo", "Create", new { Controller = "Empresa" }, new { @class = "btn btn-default" })
-                    </p>
+
                 </div>
             </div>
         </div>
     </div>
 </center>
-

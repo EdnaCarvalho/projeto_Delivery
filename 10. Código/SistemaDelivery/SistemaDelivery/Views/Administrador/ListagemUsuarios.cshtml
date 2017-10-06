@@ -24,21 +24,27 @@
                         emptyRowCellValue: "___", mode: WebGridPagerModes.All, numericLinksCount: 2,
                         tableStyle: "table",
                         columns: tabela.Columns(
-                            tabela.Column("Nome", "Nome"),
-                            tabela.Column("Telefone", "Telefone"),
-                            tabela.Column("IsAdmin", "Usuario", format:(item)=>((item.IsAdmin)? "Administrador" : "Cliente")),
-                            tabela.Column("Ações", "Ações", canSort: false,
-                                format: (item) => new HtmlString(String.Format("{0} {1} {2}", new object[] {
-                                    Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
-                                    Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
-                                    Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString()
-                                }))
-            )
-        )
-    );
+                                         tabela.Column("Nome", "Nome"),
+                                         tabela.Column("Status", "Status"),
+                                         tabela.Column("Ações", "Ações", canSort: false,
+                                             format: (item) =>
+                                                 (((Model.Models.Usuario)usuario)) ?
+                                                     new HtmlString(String.Format("{0}  {1}   {2}   {3}", new object[] {
+                                                Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                                Html.ActionLink("Remover", "Delete", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                                Html.ActionLink("Detalhes", "Details", new { id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                                Html.ActionLink("Realizar Pedido","RealizarPedido",new { controller = "Pedido" , id = item.Id }, new { @class = "btn btn-default" }).ToString(),
+                                                     }))
+                                                 :
+                                                    new HtmlString(String.Format("{0}    {1}", new object[] {
+                                                    Html.ActionLink("Detalhes", "Details", new {id = item.Id }, new { @class = "btn btn-default" }).ToString()
+                                                    }))
+                                         )
+                                     )
+                                 );
                     }
                     <p>
-                        @Html.ActionLink("Adicionar Novo", "Create", new { Controller = "Administrador" }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Adicionar Novo", "Create", new { controller = "Administrador" }, new { @class = "btn btn-default" })
                     </p>
 
                 </div>

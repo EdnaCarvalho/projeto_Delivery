@@ -7,12 +7,14 @@
         <div class="form-horizontal">
             <div class="container text-center">
                 <div class="row thumbnail">
-                    <h2>Dados de @Model.Nome </h2>
+                    <h2>
+                        Dados do Cliente
+                    </h2>
                     <hr />
-
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
                     @Html.HiddenFor(model => model.Senha)
+                    @Html.HiddenFor(model => model.Login)
                     @Html.HiddenFor(model => model.ConfirmarSenha)
 
                     <div class="form-group">
@@ -71,14 +73,6 @@
                         <div class="col-md-4"> </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Login, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-3">
-                            @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-7"> </div>
-                    </div>
-                    <div class="form-group">
                         @Html.LabelFor(model => model.IsAdmin, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-3">
                             <div class="checkbox">
@@ -96,7 +90,7 @@
                             <input type="submit" value="Salvar" class="btn btn-default" />
                         </div>
                         <div class="col-md-2 ">
-                            @Html.ActionLink("Cancelar", "ListagemUsuarios", new { Controller = "Administrador" }, new { @class = "btn btn-default" })
+                            @Html.ActionLink("Cancelar", "ListagemUsuarios", new { controller = "Administrador" }, new { @class = "btn btn-default" })
                         </div>
                         <div class="col-md-4"> </div>
                     </div>
@@ -106,4 +100,6 @@
         </div>
     </center>
 }
-
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

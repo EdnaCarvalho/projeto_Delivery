@@ -9,91 +9,88 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-
     <div style=" font-family:'Times New Roman'; color:#FFFFFF; background-color: darkslateblue" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand pull-right"><img src="~/Content/imagem/ag.png" style="width:50px;height:50px;"/></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
-                @*@Html.ActionLink("DELIVERYÁGUA&GÁS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                @Html.ActionLink("DELIVERYÁGUA&GÁS", "Index", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @if (SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) == null)
+                {
+                    <li>@Html.ActionLink(" ACESSAR", "Login", "Home")</li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink(" MEUS PEDIDOS ", "ListagemPedidos", "Pedido")</li>
 
-                    @if (!Request.IsAuthenticated)
+                    String controlle = "";
+                    Model.Models.Pessoa pessoa = SistemaDelivery.Util.SessionHelper.Get(SistemaDelivery.Util.SessionKeys.Pessoa) as Model.Models.Pessoa;
+                    if (typeof(Model.Models.Empresa) == pessoa.GetType())
                     {
-                        //TODO valta para todos o menu de Pedidos
-                <!--ADMINISTRADOR -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                DISTRIBUIDORAS
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <p class="dropdown-item">@Html.ActionLink("CADASTRADAS", "ListagemDistribuidoras", "Empresa")</p>
-                                <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVA", "Create", "Empresa")</p>
-                            </div>
-                        </li>
+                     <!--EMPRESA-->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    PRODUTOS
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <p class="dropdown-item">@Html.ActionLink("CADASTRADOS", "Index", "Produto")</p>
+                                    <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Produto")</p>
+                                </div>
+                            </li>
+                        controlle = "Empresa";
+                    }
+                    else
+                    {
+                        if (typeof(Model.Models.Usuario) == pessoa.GetType() && ((Model.Models.Usuario)pessoa).IsAdmin)
+                        {
+                             <!--ADMINISTRADOR -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    DISTRIBUIDORAS
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <p class="dropdown-item">@Html.ActionLink("CADASTRADAS", "ListagemDistribuidoras", "Empresa")</p>
+                                    <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVA", "Create", "Empresa")</p>
+                                </div>
+                            </li>
 
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            USUARIOS
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            <p class="dropdown-item">@Html.ActionLink("CADASTRADOS", "ListagemUsuarios", "Administrador")</p>
-                                            <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Administrador")</p>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            MEU PERFIL ADMINISTRADOR
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Administrador")</p>
-                                            <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", "Administrador")</p>
-                                        </div>
-                                    </li>
-
-                        //Cliente
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                MEU PERFIL CLIENTE
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Cliente")</p>
-                                <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", "Cliente")</p>
-                            </div>
-                        </li>
-
-
-                <!--EMPRESA-->
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            PRODUTOS
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            <p class="dropdown-item">@Html.ActionLink("CADASTRADOS", "Index", "Produto")</p>
-                                            <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Produto")</p>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            MEU PERFIL DISTRIBUIDORA
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", "Empresa")</p>
-                                            <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", "Empresa")</p>
-                                        </div>
-                                    </li>
-                    <!--TODOS-->
-                                    <li>@Html.ActionLink(" SAIR ", "Index", "Home")</li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    USUARIOS
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <p class="dropdown-item">@Html.ActionLink("CADASTRADOS", "ListagemUsuarios", "Administrador")</p>
+                                    <p class="dropdown-item">@Html.ActionLink("CADASTRAR NOVO", "Create", "Administrador")</p>
+                                </div>
+                            </li>
+                            controlle = "Administrador";
+                        }
+                        else
+                        {
+                            if ((typeof(Model.Models.Usuario) == pessoa.GetType() && !((Model.Models.Usuario)pessoa).IsAdmin))
+                            {
+                                <li>@Html.ActionLink(" DISTRIBUIDORAS ", "ListagemDistribuidoras", "Empresa")</li>
+                                controlle = "Cliente";
+                            }
+                        }
 
                     }
-                </ul>
-            </div>
-
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            MEU PERFIL
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <p class="dropdown-item">@Html.ActionLink("ALTERAR SENHA", "AlterarSenha", controlle)</p>
+                            <p class="dropdown-item">@Html.ActionLink("ALTERAR DADOS", "AlterarDados", controlle)</p>
+                        </div>
+                    </li>
+                    <li>@Html.ActionLink(" SAIR ", "Logout", "Home")</li>
+                }
+            </ul>
         </div>
+      </div>
     </div>
     <hr />
     @RenderBody()
